@@ -10,6 +10,12 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+dist*
+build
+build*
+archive/
+hosting-upload-mini/
+*.zip
 *.local
 .env
 
