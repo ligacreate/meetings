@@ -24,11 +24,10 @@ jobs:
 
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
-        with:
-          server: ${{ secrets.185.162.93.61 }}
-          username: ${{ secrets.skrebeiko_meetings }}
-          password: ${{ secrets.tW7nA8qK8l }}
-          port: ${{ secrets.21 }}
-          local-dir: build/
-          server-dir: /www/meetings.skrebeyko.ru/
-          dangerous-clean-slate: true
+        server: ${{ secrets.FTP_SERVER }}
+  username: ${{ secrets.FTP_USERNAME }}
+  password: ${{ secrets.FTP_PASSWORD }}
+  port: ${{ secrets.FTP_PORT }}
+  local-dir: build/
+  server-dir: /www/meetings.skrebeyko.ru/
+  dangerous-clean-slate: true
