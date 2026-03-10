@@ -22,13 +22,7 @@ const RedirectHandler = () => {
   return null;
 };
 
-import { checkEnvVariables } from "@/utils/checkEnv";
-
 const App = () => {
-  useEffect(() => {
-    checkEnvVariables();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
