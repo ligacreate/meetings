@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Manrope:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* CLEAN AIR - CORE PALETTE */
+    --background: 210 20% 98%;
+    /* #F8F9FA - Ultra Light Gray */
+    --foreground: 220 10% 10%;
+    /* #1A1C1E - Soft Black */
+
+    --card: 0 0% 100%;
+    /* Pure White */
+    --card-foreground: 220 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 10%;
+
+    --primary: 215 28% 47%;
+    /* Soft Slate Blue */
+    --primary-foreground: 0 0% 100%;
+    /* White text */
+
+    --secondary: 215 20% 96%;
+    /* Very subtle blue-grey for secondary bg */
+    --secondary-foreground: 215 28% 47%;
+    /* Using Primary color for secondary text */
+
+    --muted: 215 20% 96%;
+    --muted-foreground: 215 20% 45%;
+    /* Muted Blue-Gray */
+
+    --accent: 215 20% 94%;
+    --accent-foreground: 215 28% 47%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 215 20% 92%;
+    /* Subtle blue-grey border */
+    --input: 215 20% 92%;
+    --ring: 215 28% 47%;
+
+    --radius: 1rem;
+    /* Slightly softer radius */
+
+    /* Extended Aesthetic Variables */
+    --shadow-soft: 0 10px 40px -10px rgba(0, 0, 0, 0.05);
+    /* Soft diffused shadow */
+    --shadow-hover: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body antialiased selection:bg-black/10 selection:text-black;
+    overflow-x: hidden;
+  }
+
+  /* Removed Noise Overlay for cleaner look */
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display tracking-tight text-foreground;
+  }
+
+  h1 {
+    @apply text-5xl md:text-7xl font-bold text-gray-900;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-semibold text-gray-900;
+  }
+
+  h3 {
+    @apply text-2xl font-semibold text-gray-800;
+  }
+
+  p {
+    @apply leading-relaxed text-muted-foreground;
+  }
+}
+
+@layer utilities {
+
+  /* Clean Card Style - Replacing Glass */
+  .clean-card {
+    @apply bg-white rounded-3xl border border-border/40;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Legacy class mapping for ease of refactor, but stylized for Light Mode */
+  .glass-card {
+    @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-sm rounded-3xl;
+    /* Keeps a bit of glass feel but light and airy */
+  }
+
+  .clean-hover {
+    @apply hover:-translate-y-1 hover:shadow-lg transition-transform duration-300;
+  }
+
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
