@@ -1,11 +1,21 @@
 import { useState, useMemo } from 'react';
-import { MapPin, Clock, ChevronLeft, ChevronRight, Grid3x3, X, Calendar as CalendarIcon, Globe } from 'lucide-react';
+import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import MapView from './MapView';
 import { getMonthGenitive, getMonthNominative, formatEventDateTimeForViewer } from '@/lib/dateUtils';
 import { Event } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LazyImage } from '@/components/ui/lazy-image';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator
+} from '@/components/ui/command';
 
 interface EventsViewProps {
   events: Event[];
@@ -28,7 +38,9 @@ const normalizeDate = (dateStr: string): string => {
 const cityLabel = (rawCity?: string): string => {
   const trimmed = String(rawCity || '').trim();
   if (!trimmed) return '';
-  return trimmed.replace(/\s*\(UTC[+-]?\d+(?::\d{2})?\)\s*$/i, '').trim();
+  const noUtc = trimmed.replace(/\s*\(UTC[+-]?\d+(?::\d{2})?\)\s*$/i, '').trim();
+  const commaIdx = noUtc.indexOf(',');
+  return (commaIdx === -1 ? noUtc : noUtc.slice(0, commaIdx)).trim();
 };
 
 const cityKey = (rawCity?: string): string => {
@@ -37,6 +49,11 @@ const cityKey = (rawCity?: string): string => {
     .replace(/ё/g, 'е')
     .replace(/\s+/g, ' ')
     .trim();
+};
+
+const isOnlineCity = (rawCity?: string): boolean => {
+  const key = cityKey(rawCity).replace(/-/g, '');
+  return key === cityKey(ONLINE_CITY);
 };
 
 const EventsView = ({ events, cities }: EventsViewProps) => {
@@ -48,7 +65,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('month');
   const [showMap, setShowMap] = useState(false);
-  const [showAllCities, setShowAllCities] = useState(false);
+  const [cityOpen, setCityOpen] = useState(false);
   const [filterByDate, setFilterByDate] = useState(false);
   const showDebug = (() => {
     if (typeof window === 'undefined') return false;
@@ -72,6 +89,20 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
     const day = new Date(date.getFullYear(), date.getMonth(), 1).getDay();
     return day === 0 ? 6 : day - 1;
   };
+
+  const cityOptions = useMemo(() => {
+    const base = cities.filter((c) => c !== ALL_CITY && !isOnlineCity(c));
+    const seen = new Set<string>();
+    const unique: string[] = [];
+    base.forEach((city) => {
+      const label = cityLabel(city);
+      const key = cityKey(label);
+      if (!key || seen.has(key)) return;
+      seen.add(key);
+      unique.push(label);
+    });
+    return unique;
+  }, [cities]);
 
   const handlePrevMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   const handleNextMonth = () => setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1));
@@ -101,8 +132,12 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
     });
 
     if (selectedCity !== ALL_CITY) {
-      const selectedKey = cityKey(selectedCity);
-      filtered = filtered.filter((e) => cityKey(e.city) === selectedKey);
+      if (isOnlineCity(selectedCity)) {
+        filtered = filtered.filter((e) => isOnlineCity(e.city));
+      } else {
+        const selectedKey = cityKey(selectedCity);
+        filtered = filtered.filter((e) => cityKey(e.city) === selectedKey);
+      }
     }
 
     if (viewMode === 'day') {
@@ -181,70 +216,68 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
             ))}
           </div>
 
-          <div className="flex items-center gap-2 w-full md:w-auto overflow-x-auto no-scrollbar pb-2 md:pb-0">
-            <button
-              onClick={() => setShowAllCities(!showAllCities)}
-              className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all shrink-0 
-                ${showAllCities ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent border-border text-muted-foreground hover:border-border/80 hover:text-foreground'}`}
-            >
-              <Grid3x3 className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => setSelectedCity(ALL_CITY)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all
-                ${selectedCity === ALL_CITY ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent border-border text-muted-foreground hover:text-foreground hover:border-border/80'}
-              `}
-            >
-              {ALL_CITY}
-            </button>
-            <button
-              onClick={() => setSelectedCity(ONLINE_CITY)}
-              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all
-                ${cityKey(selectedCity) === cityKey(ONLINE_CITY) ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent border-border text-muted-foreground hover:text-foreground hover:border-border/80'}
-              `}
-            >
-              {ONLINE_CITY}
-            </button>
-            {!showAllCities && cities.filter(c => c !== ALL_CITY && cityKey(c) !== cityKey(ONLINE_CITY)).slice(0, 2).map(city => (
-              <button
-                key={city}
-                onClick={() => setSelectedCity(city)}
-                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all
-                  ${cityKey(selectedCity) === cityKey(city) ? 'bg-primary text-primary-foreground border-primary' : 'bg-transparent border-border text-muted-foreground hover:text-foreground hover:border-border/80'}
-                `}
-              >
-                {city}
-              </button>
-            ))}
+          <div className="flex items-center gap-2 w-full md:w-auto">
+            <Popover open={cityOpen} onOpenChange={setCityOpen}>
+              <PopoverTrigger asChild>
+                <button
+                  className="min-w-[220px] px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap border transition-all bg-transparent border-border text-foreground hover:border-border/80 flex items-center justify-between gap-2"
+                >
+                  <span className="truncate">
+                    {selectedCity === ALL_CITY
+                      ? 'Все города'
+                      : isOnlineCity(selectedCity)
+                        ? ONLINE_CITY
+                        : `Город: ${selectedCity}`}
+                  </span>
+                  <ChevronsUpDown className="w-4 h-4 text-muted-foreground" />
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[260px] p-0" align="end">
+                <Command>
+                  <CommandInput placeholder="Поиск города..." />
+                  <CommandList>
+                    <CommandEmpty>Ничего не найдено</CommandEmpty>
+                    <CommandGroup heading="Фильтр">
+                      <CommandItem
+                        onSelect={() => {
+                          setSelectedCity(ALL_CITY);
+                          setCityOpen(false);
+                        }}
+                      >
+                        <Check className={`mr-2 h-4 w-4 ${selectedCity === ALL_CITY ? 'opacity-100' : 'opacity-0'}`} />
+                        {ALL_CITY}
+                      </CommandItem>
+                      <CommandItem
+                        onSelect={() => {
+                          setSelectedCity(ONLINE_CITY);
+                          setCityOpen(false);
+                        }}
+                      >
+                        <Check className={`mr-2 h-4 w-4 ${isOnlineCity(selectedCity) ? 'opacity-100' : 'opacity-0'}`} />
+                        {ONLINE_CITY}
+                      </CommandItem>
+                    </CommandGroup>
+                    <CommandSeparator />
+                    <CommandGroup heading="Города">
+                      {cityOptions.map((city) => (
+                        <CommandItem
+                          key={city}
+                          onSelect={() => {
+                            setSelectedCity(city);
+                            setCityOpen(false);
+                          }}
+                        >
+                          <Check className={`mr-2 h-4 w-4 ${cityKey(selectedCity) === cityKey(city) ? 'opacity-100' : 'opacity-0'}`} />
+                          {city}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  </CommandList>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
-
-        {/* Expanded Cities Grid */}
-        <AnimatePresence>
-          {showAllCities && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden"
-            >
-              <div className="clean-card p-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2">
-                {cities.filter(c => c !== ALL_CITY && cityKey(c) !== cityKey(ONLINE_CITY)).map((city) => (
-                  <button
-                    key={city}
-                    onClick={() => { setSelectedCity(city); setShowAllCities(false); }}
-                    className={`px-3 py-2 rounded-lg text-sm text-center transition-colors
-                      ${cityKey(selectedCity) === cityKey(city) ? 'bg-secondary text-foreground font-medium' : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground'}
-                    `}
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
         {/* Calendar View */}
         {viewMode === 'month' && (
