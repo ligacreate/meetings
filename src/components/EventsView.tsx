@@ -25,6 +25,7 @@ interface EventsViewProps {
 type ViewMode = 'day' | 'week' | 'month';
 const ALL_CITY = 'Все';
 const ONLINE_CITY = 'Онлайн';
+const DESCRIPTION_COLLAPSED_LENGTH = 220;
 
 const normalizeDate = (dateStr: string): string => {
   if (!dateStr) return '';
@@ -67,6 +68,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
   const [showMap, setShowMap] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [filterByDate, setFilterByDate] = useState(false);
+  const [expandedEventIds, setExpandedEventIds] = useState<Set<number>>(() => new Set());
   const showDebug = (() => {
     if (typeof window === 'undefined') return false;
     try {
@@ -114,6 +116,18 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
       setSelectedDate(date);
       setFilterByDate(true);
     }
+  };
+
+  const toggleDescription = (eventId: number) => {
+    setExpandedEventIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(eventId)) {
+        next.delete(eventId);
+      } else {
+        next.add(eventId);
+      }
+      return next;
+    });
   };
 
   const filteredEvents = useMemo(() => {
@@ -363,9 +377,12 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                 <p className="text-muted-foreground">Нет событий по выбранным фильтрам</p>
               </motion.div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8">
                 {filteredEvents.map((event, index) => {
                   const eventDate = new Date(normalizeDate(event.date) + 'T00:00:00');
+                  const description = event.description?.trim() ?? '';
+                  const isLongDescription = description.length > DESCRIPTION_COLLAPSED_LENGTH;
+                  const isDescriptionExpanded = expandedEventIds.has(event.id);
                   const displayDateTime = formatEventDateTimeForViewer(
                     event.date,
                     event.time,
@@ -378,10 +395,10 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full"
+                      className="event-card bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full"
                     >
                       {/* Image Frame - Top "Cover" */}
-                      <div className="w-full aspect-[4/3] rounded-[2rem] overflow-hidden relative bg-slate-50 shrink-0 shadow-inner mb-6">
+                      <div className="event-card-image w-full aspect-[4/3] rounded-[2rem] overflow-hidden relative bg-slate-50 shrink-0 shadow-inner mb-6">
                         <LazyImage
                           src={event.image_url}
                           alt={event.title}
@@ -401,7 +418,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                       </div>
 
                       {/* Content */}
-                      <div className="flex-1 flex flex-col px-2 w-full items-start text-left">
+                      <div className="event-card-content flex-1 flex flex-col px-2 w-full items-start text-left">
                         {showDebug && (
                           <div className="text-[11px] text-slate-400 mb-2">
                             id: {event.id}
@@ -433,9 +450,24 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
 
                         <p className="text-base text-slate-500 font-medium mb-4">{event.speaker}</p>
 
-                        <p className="text-slate-600 text-sm leading-relaxed mb-8 font-body">
-                          {event.description}
-                        </p>
+                        <div className="mb-8">
+                          <p
+                            className={`event-card-description text-slate-600 text-sm leading-relaxed font-body ${
+                              isDescriptionExpanded ? '' : 'line-clamp-4'
+                            }`}
+                          >
+                            {description}
+                          </p>
+                          {isLongDescription && (
+                            <button
+                              type="button"
+                              onClick={() => toggleDescription(event.id)}
+                              className="mt-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                            >
+                              {isDescriptionExpanded ? 'Свернуть' : 'Читать далее'}
+                            </button>
+                          )}
+                        </div>
 
                         <div className="mt-auto pt-6 flex flex-col w-full gap-4 border-t border-slate-100">
                           <div className="text-xl font-bold text-slate-900">

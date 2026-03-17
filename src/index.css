@@ -121,4 +121,41 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+
+  @media (orientation: landscape) and (max-width: 1023px) {
+    .event-card {
+      @apply flex-row items-stretch p-3 rounded-[2rem];
+    }
+
+    .event-card-image {
+      @apply w-32 mb-0 rounded-2xl;
+      aspect-ratio: 4 / 5;
+    }
+
+    .event-card-content {
+      @apply px-2;
+    }
+
+    .event-card-content h4 {
+      font-size: 1.25rem;
+      line-height: 1.35;
+    }
+
+    .event-card-description {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .event-card .mt-auto {
+      padding-top: 1rem;
+      gap: 0.75rem;
+    }
+
+    .event-card .mt-auto a {
+      padding-top: 0.75rem;
+      padding-bottom: 0.75rem;
+    }
+  }
 }
