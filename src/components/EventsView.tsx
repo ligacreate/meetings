@@ -474,7 +474,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                           )}
                         </div>
 
-                        <div className="mt-auto pt-6 flex w-full items-center justify-between gap-3 border-t border-slate-100">
+                        <div className="mt-auto pt-6 flex min-h-[3.25rem] w-full items-center justify-between gap-3 border-t border-slate-100">
                           <div className="text-xl font-bold text-slate-900 whitespace-nowrap shrink-0 leading-none">
                             {event.price || 'Бесплатно'}
                           </div>
@@ -484,7 +484,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                               href={event.registration_link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="ml-auto px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 inline-flex items-center justify-center gap-2 whitespace-nowrap"
+                              className="ml-auto h-10 min-w-[118px] px-4 rounded-full bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 inline-flex items-center justify-center gap-2 whitespace-nowrap"
                             >
                               Записаться
                             </a>
