@@ -195,7 +195,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
     filteredEvents.forEach((event) => {
       const descriptionEl = descriptionRefs.current.get(event.id);
       if (!descriptionEl) return;
-      if (descriptionEl.scrollHeight > descriptionEl.clientHeight + 1) {
+      if (descriptionEl.scrollHeight - descriptionEl.clientHeight > 16) {
         nextOverflowing.add(event.id);
       }
     });
@@ -423,11 +423,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             </div>
                           }
                         />
-                        <div className="absolute top-4 left-4">
-                          <Badge className="bg-white/90 backdrop-blur-md text-slate-900 shadow-sm border-0 font-medium px-3 py-1 text-xs hover:bg-white">
-                            {event.category}
-                          </Badge>
-                        </div>
                       </div>
 
                       {/* Content */}
@@ -443,6 +438,9 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         )}
                         {/* Meta Pills - Left Aligned */}
                         <div className="flex flex-wrap gap-2 mb-4 justify-start">
+                          <Badge className="rounded-full bg-slate-50 border border-slate-100 text-slate-600 font-bold px-3 py-1.5 text-xs tracking-wide hover:bg-slate-50">
+                            {event.category || 'Встреча'}
+                          </Badge>
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-bold tracking-wide">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             {event.city === 'Онлайн' ? displayDateTime.dateLabel : `${eventDate.getDate()} ${getMonthGenitive(eventDate)}`}
@@ -475,7 +473,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             className={`event-card-description text-slate-600 text-sm leading-relaxed font-body ${
                               isDescriptionExpanded
                                 ? 'event-card-description-expanded'
-                                : 'event-card-description-collapsed line-clamp-4'
+                                : 'event-card-description-collapsed line-clamp-6'
                             }`}
                           >
                             {description}
@@ -501,7 +499,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                               href={event.registration_link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="w-full px-6 py-4 rounded-[1.5rem] bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center gap-2"
+                              className="self-start px-5 py-3 rounded-full bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 inline-flex items-center justify-center gap-2"
                             >
                               Записаться
                             </a>
