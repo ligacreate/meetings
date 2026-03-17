@@ -475,7 +475,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         </div>
 
                         <div className="mt-auto pt-6 flex w-full items-center justify-between gap-3 border-t border-slate-100">
-                          <div className="text-xl font-bold text-slate-900">
+                          <div className="text-xl font-bold text-slate-900 whitespace-nowrap shrink-0 leading-none">
                             {event.price || 'Бесплатно'}
                           </div>
 
