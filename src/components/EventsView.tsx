@@ -457,7 +457,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
 
                         <p className="text-base text-slate-500 font-medium mb-4">{event.speaker}</p>
 
-                        <div className="mb-8">
+                        <div className={`mb-8 w-full ${isDescriptionExpanded ? '' : 'min-h-[10rem]'}`}>
                           <p
                             className="event-card-description text-slate-600 text-sm leading-relaxed font-body"
                           >
