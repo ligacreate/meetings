@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo } from 'react';
 import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import MapView from './MapView';
@@ -25,6 +25,15 @@ interface EventsViewProps {
 type ViewMode = 'day' | 'week' | 'month';
 const ALL_CITY = 'Все';
 const ONLINE_CITY = 'Онлайн';
+const DESCRIPTION_PREVIEW_LENGTH = 240;
+
+const truncateAtWordBoundary = (text: string, maxLength: number): string => {
+  if (text.length <= maxLength) return text;
+  const sliced = text.slice(0, maxLength);
+  const lastSpaceIndex = sliced.lastIndexOf(' ');
+  if (lastSpaceIndex <= 0) return `${sliced.trimEnd()}...`;
+  return `${sliced.slice(0, lastSpaceIndex).trimEnd()}...`;
+};
 
 const normalizeDate = (dateStr: string): string => {
   if (!dateStr) return '';
@@ -68,8 +77,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
   const [cityOpen, setCityOpen] = useState(false);
   const [filterByDate, setFilterByDate] = useState(false);
   const [expandedEventIds, setExpandedEventIds] = useState<Set<number>>(() => new Set());
-  const [overflowingDescriptionIds, setOverflowingDescriptionIds] = useState<Set<number>>(() => new Set());
-  const descriptionRefs = useRef<Map<number, HTMLParagraphElement>>(new Map());
   const showDebug = (() => {
     if (typeof window === 'undefined') return false;
     try {
@@ -189,18 +196,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
     }
     return filtered;
   }, [events, selectedCity, selectedDate, viewMode, currentDate, filterByDate]);
-
-  useEffect(() => {
-    const nextOverflowing = new Set<number>();
-    filteredEvents.forEach((event) => {
-      const descriptionEl = descriptionRefs.current.get(event.id);
-      if (!descriptionEl) return;
-      if (descriptionEl.scrollHeight - descriptionEl.clientHeight > 16) {
-        nextOverflowing.add(event.id);
-      }
-    });
-    setOverflowingDescriptionIds(nextOverflowing);
-  }, [filteredEvents, expandedEventIds]);
 
   const monthName = `${getMonthNominative(currentDate)} ${currentDate.getFullYear()}`;
   const daysInMonth = getDaysInMonth(currentDate);
@@ -394,8 +389,9 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                 {filteredEvents.map((event, index) => {
                   const eventDate = new Date(normalizeDate(event.date) + 'T00:00:00');
                   const description = event.description?.trim() ?? '';
+                  const collapsedDescription = truncateAtWordBoundary(description, DESCRIPTION_PREVIEW_LENGTH);
                   const isDescriptionExpanded = expandedEventIds.has(event.id);
-                  const showDescriptionToggle = overflowingDescriptionIds.has(event.id) || isDescriptionExpanded;
+                  const showDescriptionToggle = description.length > DESCRIPTION_PREVIEW_LENGTH;
                   const displayDateTime = formatEventDateTimeForViewer(
                     event.date,
                     event.time,
@@ -463,20 +459,9 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
 
                         <div className="mb-8">
                           <p
-                            ref={(el) => {
-                              if (el) {
-                                descriptionRefs.current.set(event.id, el);
-                              } else {
-                                descriptionRefs.current.delete(event.id);
-                              }
-                            }}
-                            className={`event-card-description text-slate-600 text-sm leading-relaxed font-body ${
-                              isDescriptionExpanded
-                                ? 'event-card-description-expanded'
-                                : 'event-card-description-collapsed line-clamp-6'
-                            }`}
+                            className="event-card-description text-slate-600 text-sm leading-relaxed font-body"
                           >
-                            {description}
+                            {isDescriptionExpanded ? description : collapsedDescription}
                           </p>
                           {showDescriptionToggle && (
                             <button
