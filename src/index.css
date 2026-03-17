@@ -123,17 +123,21 @@
   }
 
   @media (orientation: landscape) and (max-width: 1023px) {
+    .event-cards-grid {
+      grid-template-columns: minmax(0, 1fr) !important;
+    }
+
     .event-card {
-      @apply flex-row items-stretch p-3 rounded-[2rem];
+      @apply flex-row items-start gap-3 p-3 rounded-[2rem];
     }
 
     .event-card-image {
-      @apply w-32 mb-0 rounded-2xl;
-      aspect-ratio: 4 / 5;
+      @apply w-20 h-20 mb-0 rounded-xl self-start;
+      aspect-ratio: 1 / 1;
     }
 
     .event-card-content {
-      @apply px-2;
+      @apply px-1;
     }
 
     .event-card-content h4 {
@@ -141,7 +145,7 @@
       line-height: 1.35;
     }
 
-    .event-card-description {
+    .event-card-description.event-card-description-collapsed {
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
