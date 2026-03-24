@@ -385,7 +385,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                 <p className="text-muted-foreground">Нет событий по выбранным фильтрам</p>
               </motion.div>
             ) : (
-              <div className="event-cards-grid grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-6 xl:gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
                 {filteredEvents.map((event, index) => {
                   const eventDate = new Date(normalizeDate(event.date) + 'T00:00:00');
                   const description = event.description?.trim() ?? '';
@@ -404,10 +404,10 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="event-card bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full"
+                      className="bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full"
                     >
                       {/* Image Frame - Top "Cover" */}
-                      <div className="event-card-image w-full aspect-[4/3] rounded-[2rem] overflow-hidden relative bg-slate-50 shrink-0 shadow-inner mb-6">
+                      <div className="w-full aspect-[4/3] rounded-[2rem] overflow-hidden relative bg-slate-50 shrink-0 shadow-inner mb-6">
                         <LazyImage
                           src={event.image_url}
                           alt={event.title}
@@ -419,10 +419,15 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             </div>
                           }
                         />
+                        <div className="absolute top-4 left-4">
+                          <Badge className="bg-white/90 backdrop-blur-md text-slate-900 shadow-sm border-0 font-medium px-3 py-1 text-xs hover:bg-white">
+                            {event.category || 'Встреча'}
+                          </Badge>
+                        </div>
                       </div>
 
                       {/* Content */}
-                      <div className="event-card-content flex-1 flex flex-col px-2 w-full items-start text-left">
+                      <div className="flex-1 flex flex-col px-2 w-full items-start text-left">
                         {showDebug && (
                           <div className="text-[11px] text-slate-400 mb-2">
                             id: {event.id}
@@ -434,9 +439,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         )}
                         {/* Meta Pills - Left Aligned */}
                         <div className="flex flex-wrap gap-2 mb-4 justify-start">
-                          <Badge className="rounded-full bg-slate-50 border border-slate-100 text-slate-600 font-bold px-3 py-1.5 text-xs tracking-wide hover:bg-slate-50">
-                            {event.category || 'Встреча'}
-                          </Badge>
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-bold tracking-wide">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             {event.city === 'Онлайн' ? displayDateTime.dateLabel : `${eventDate.getDate()} ${getMonthGenitive(eventDate)}`}
@@ -457,7 +459,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
 
                         <p className="text-base text-slate-500 font-medium mb-4">{event.speaker}</p>
 
-                        <div className={`mb-8 w-full ${isDescriptionExpanded ? '' : 'min-h-[10rem]'}`}>
+                        <div className="mb-4">
                           <p
                             className="event-card-description text-slate-600 text-sm leading-relaxed font-body"
                           >
@@ -474,8 +476,8 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                           )}
                         </div>
 
-                        <div className="mt-auto pt-6 flex min-h-[3.25rem] w-full items-center justify-between gap-3 border-t border-slate-100">
-                          <div className="text-xl font-bold text-slate-900 whitespace-nowrap shrink-0 leading-none">
+                        <div className="pt-4 flex flex-col w-full gap-4 border-t border-slate-100">
+                          <div className="text-xl font-bold text-slate-900">
                             {event.price || 'Бесплатно'}
                           </div>
 
@@ -484,7 +486,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                               href={event.registration_link}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="ml-auto h-10 min-w-[118px] px-4 rounded-full bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 inline-flex items-center justify-center gap-2 whitespace-nowrap"
+                              className="w-full px-6 py-4 rounded-[1.5rem] bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center gap-2"
                             >
                               Записаться
                             </a>
