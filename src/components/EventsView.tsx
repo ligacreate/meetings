@@ -404,7 +404,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full"
+                      className="bg-white rounded-[2.5rem] p-4 shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border border-slate-100 group flex flex-col h-full md:min-h-[44rem]"
                     >
                       {/* Image Frame - Top "Cover" */}
                       <div className="w-full aspect-[4/3] rounded-[2rem] overflow-hidden relative bg-slate-50 shrink-0 shadow-inner mb-6">
@@ -459,21 +459,23 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
 
                         <p className="text-base text-slate-500 font-medium mb-4">{event.speaker}</p>
 
-                        <div className="mb-4">
+                        <div className="mb-4 min-h-[12.5rem] w-full">
                           <p
                             className="event-card-description text-slate-600 text-sm leading-relaxed font-body"
                           >
                             {isDescriptionExpanded ? description : collapsedDescription}
                           </p>
-                          {showDescriptionToggle && (
-                            <button
-                              type="button"
-                              onClick={() => toggleDescription(event.id)}
-                              className="mt-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
-                            >
-                              {isDescriptionExpanded ? 'Свернуть' : 'Читать далее'}
-                            </button>
-                          )}
+                          <div className="mt-2 h-5">
+                            {showDescriptionToggle && (
+                              <button
+                                type="button"
+                                onClick={() => toggleDescription(event.id)}
+                                className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+                              >
+                                {isDescriptionExpanded ? 'Свернуть' : 'Читать далее'}
+                              </button>
+                            )}
+                          </div>
                         </div>
 
                         <div className="mt-auto pt-4 flex flex-col w-full gap-4 border-t border-slate-100">
