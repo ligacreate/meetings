@@ -323,3 +323,55 @@ export const formatEventDateTimeForViewer = (
     timeLabel: localTime
   };
 };
+
+const formatTimeInZone = (date: Date, timeZone: string): string => {
+  return new Intl.DateTimeFormat('ru-RU', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone
+  }).format(date);
+};
+
+const formatDateInZone = (date: Date, timeZone: string): string => {
+  return new Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'long',
+    timeZone
+  }).format(date);
+};
+
+export const formatEventDateTimeForCityAndMoscow = (
+  dateStr: string,
+  timeStr: string,
+  city: string = 'Москва',
+  sourceTimezone?: string | null
+): { dateLabel: string; timeLabel: string; moscowTimeLabel: string } => {
+  const sourceTz = sourceTimezone?.trim() || resolveCityTimeZone(city, 'Europe/Moscow') || 'Europe/Moscow';
+  const hasExplicitTz = Boolean(sourceTimezone?.trim());
+
+  let utcDate = hasExplicitTz
+    ? zonedDateTimeToUtc(dateStr, timeStr, sourceTz)
+    : parseEventDate(dateStr, timeStr, city);
+  if (!utcDate || Number.isNaN(utcDate.getTime())) {
+    utcDate = hasExplicitTz
+      ? parseEventDate(dateStr, timeStr, city)
+      : zonedDateTimeToUtc(dateStr, timeStr, sourceTz);
+  }
+
+  if (!utcDate || Number.isNaN(utcDate.getTime())) {
+    const localFallback = formatEventTime(dateStr, timeStr, city);
+    const mskFallback = formatEventTime(dateStr, timeStr, 'Москва');
+    return {
+      dateLabel: dateStr,
+      timeLabel: localFallback,
+      moscowTimeLabel: mskFallback
+    };
+  }
+
+  return {
+    dateLabel: formatDateInZone(utcDate, sourceTz),
+    timeLabel: formatTimeInZone(utcDate, sourceTz),
+    moscowTimeLabel: formatTimeInZone(utcDate, 'Europe/Moscow')
+  };
+};

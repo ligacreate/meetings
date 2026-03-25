@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import MapView from './MapView';
-import { getMonthGenitive, getMonthNominative, formatEventDateTimeForViewer } from '@/lib/dateUtils';
+import { getMonthGenitive, getMonthNominative, formatEventDateTimeForCityAndMoscow } from '@/lib/dateUtils';
 import { Event } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LazyImage } from '@/components/ui/lazy-image';
@@ -392,12 +392,13 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                   const collapsedDescription = truncateAtWordBoundary(description, DESCRIPTION_PREVIEW_LENGTH);
                   const isDescriptionExpanded = expandedEventIds.has(event.id);
                   const showDescriptionToggle = description.length > DESCRIPTION_PREVIEW_LENGTH;
-                  const displayDateTime = formatEventDateTimeForViewer(
+                  const displayDateTime = formatEventDateTimeForCityAndMoscow(
                     event.date,
                     event.time,
                     event.city,
                     event.source_timezone
                   );
+                  const showMoscowTime = displayDateTime.moscowTimeLabel !== displayDateTime.timeLabel;
                   return (
                     <motion.div
                       key={event.id}
@@ -441,7 +442,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         <div className="flex flex-wrap gap-2 mb-4 justify-start">
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
-                            {event.city === 'Онлайн' ? displayDateTime.dateLabel : `${eventDate.getDate()} ${getMonthGenitive(eventDate)}`}
+                            {displayDateTime.dateLabel}
                           </div>
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             <Clock className="w-3 h-3" />
@@ -452,6 +453,11 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             {event.city}
                           </div>
                         </div>
+                        {showMoscowTime && (
+                          <div className="text-[11px] text-slate-400 mb-4">
+                            по Москве: {displayDateTime.moscowTimeLabel} мск
+                          </div>
+                        )}
 
                         <h4 className="event-card-title text-xl md:text-2xl font-display font-semibold text-slate-900 mb-2 leading-tight">
                           {event.title}
