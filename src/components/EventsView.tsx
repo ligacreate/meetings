@@ -444,20 +444,25 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             {displayDateTime.dateLabel}
                           </div>
-                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
-                            <Clock className="w-3 h-3" />
-                            {displayDateTime.timeLabel}
+                          <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide max-w-full">
+                            <Clock className="w-3 h-3 shrink-0" />
+                            <span>{displayDateTime.timeLabel}</span>
+                            {showMoscowTime && (
+                              <>
+                                <span className="text-slate-300 font-normal" aria-hidden>
+                                  ·
+                                </span>
+                                <span className="text-slate-400 font-normal tabular-nums">
+                                  {displayDateTime.moscowTimeLabel} мск
+                                </span>
+                              </>
+                            )}
                           </div>
                           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             {event.city === 'Онлайн' ? <Globe className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
                             {event.city}
                           </div>
                         </div>
-                        {showMoscowTime && (
-                          <div className="text-[11px] text-slate-400 mb-4">
-                            по Москве: {displayDateTime.moscowTimeLabel} мск
-                          </div>
-                        )}
 
                         <h4 className="event-card-title text-xl md:text-2xl font-display font-semibold text-slate-900 mb-2 leading-tight">
                           {event.title}
