@@ -122,4 +122,10 @@
     scrollbar-width: none;
   }
 
+  @media (orientation: landscape) and (max-width: 1023px) {
+    .event-card-title {
+      font-weight: 500;
+    }
+  }
+
 }

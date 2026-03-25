@@ -439,25 +439,25 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         )}
                         {/* Meta Pills - Left Aligned */}
                         <div className="flex flex-wrap gap-2 mb-4 justify-start">
-                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-bold tracking-wide">
+                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
                             {event.city === 'Онлайн' ? displayDateTime.dateLabel : `${eventDate.getDate()} ${getMonthGenitive(eventDate)}`}
                           </div>
-                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-bold tracking-wide">
+                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             <Clock className="w-3 h-3" />
                             {displayDateTime.timeLabel}
                           </div>
-                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-bold tracking-wide">
+                          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 border border-slate-100 text-slate-600 text-xs font-medium tracking-wide">
                             {event.city === 'Онлайн' ? <Globe className="w-3 h-3" /> : <MapPin className="w-3 h-3" />}
                             {event.city}
                           </div>
                         </div>
 
-                        <h4 className="text-xl md:text-2xl font-display font-bold text-slate-900 mb-2 leading-tight">
+                        <h4 className="event-card-title text-xl md:text-2xl font-display font-semibold text-slate-900 mb-2 leading-tight">
                           {event.title}
                         </h4>
 
-                        <p className="text-base text-slate-500 font-medium mb-4">{event.speaker}</p>
+                        <p className="text-base text-slate-500 font-normal mb-4">{event.speaker}</p>
 
                         <div className="mb-4 min-h-[12.5rem] w-full">
                           <p
@@ -479,7 +479,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                         </div>
 
                         <div className="mt-auto pt-4 flex flex-col w-full gap-4 border-t border-slate-100">
-                          <div className="text-xl font-bold text-slate-900">
+                          <div className="text-xl font-semibold text-slate-900">
                             {event.price || 'Бесплатно'}
                           </div>
 
