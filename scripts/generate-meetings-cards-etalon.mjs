@@ -4,7 +4,7 @@ import path from 'node:path';
 const API_BASE = process.env.POSTGREST_URL || 'https://api.skrebeyko.ru/';
 const START_DATE = process.argv[2] || '2026-03-25';
 const END_DATE = process.argv[3] || '2026-04-02';
-const CARDS_PER_PAGE = 4;
+const CARDS_PER_PAGE = 3;
 const DESCRIPTION_MAX = 240;
 
 const normalizeDate = (dateStr = '') => {
@@ -16,11 +16,11 @@ const normalizeDate = (dateStr = '') => {
 };
 
 const truncateAtWordBoundary = (text, maxLength) => {
-  if (text.length <= maxLength) return text;
+  if (text.length <= maxLength) return { text, truncated: false };
   const sliced = text.slice(0, maxLength);
   const lastSpace = sliced.lastIndexOf(' ');
-  if (lastSpace <= 0) return `${sliced.trimEnd()}...`;
-  return `${sliced.slice(0, lastSpace).trimEnd()}...`;
+  if (lastSpace <= 0) return { text: `${sliced.trimEnd()}...`, truncated: true };
+  return { text: `${sliced.slice(0, lastSpace).trimEnd()}...`, truncated: true };
 };
 
 const escapeHtml = (value = '') =>
@@ -45,7 +45,7 @@ const chunk = (arr, size) => {
 const renderCard = (event) => {
   const normalizedDate = normalizeDate(event.date);
   const dateLabel = formatRuDate(normalizedDate);
-  const description = truncateAtWordBoundary((event.description || '').trim(), DESCRIPTION_MAX);
+  const processedDesc = truncateAtWordBoundary((event.description || '').trim(), DESCRIPTION_MAX);
   const title = escapeHtml(event.title || '');
   const speaker = escapeHtml(event.speaker || '');
   const city = escapeHtml(event.city || '');
@@ -57,13 +57,13 @@ const renderCard = (event) => {
 
   return `
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         ${
           imageUrl
             ? `<img class="thumb" src="${imageUrl}" alt="${title}" loading="eager" />`
             : '<div class="thumb thumb-fallback"></div>'
         }
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">${category}</span>
             <span class="pill">• ${escapeHtml(dateLabel)}</span>
@@ -72,7 +72,8 @@ const renderCard = (event) => {
           </div>
           <h2>${title}</h2>
           <p class="speaker">${speaker}</p>
-          <p class="desc">${escapeHtml(description)}</p>
+          <p class="desc">${escapeHtml(processedDesc.text)}</p>
+          ${processedDesc.truncated ? '<p class="more">Читать далее</p>' : '<p class="more">&nbsp;</p>'}
         </div>
       </div>
       <div class="bottom">
@@ -98,46 +99,51 @@ const baseCss = `
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 26px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
+    border-radius: 30px;
     padding: 14px 16px 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
+  .top-row {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    min-height: 0;
   }
   .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
+    width: 76px;
+    height: 76px;
+    border-radius: 16px;
     object-fit: cover;
-    flex: 0 0 70px;
+    flex: 0 0 76px;
   }
   .thumb-fallback {
     background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
   }
-  .meta-wrap { flex: 1; min-width: 0; }
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
     margin-bottom: 8px;
   }
   .pill {
@@ -154,32 +160,38 @@ const baseCss = `
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     font-size: 20px;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 640;
     color: #111827;
   }
   .speaker {
     margin: 0 0 8px;
-    color: #687384;
+    color: #6a7484;
     font-size: 14px;
-    line-height: 1.25;
+    line-height: 1.2;
     font-weight: 450;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.36;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .more {
+    margin: 8px 0 0;
+    color: #6580aa;
+    font-size: 12px;
+    line-height: 1;
+    min-height: 12px;
+  }
   .bottom {
-    margin-top: 10px;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -210,9 +222,7 @@ const baseCss = `
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 `;
 
 const renderSinglePageHtml = (eventsChunk, title) => `
@@ -289,7 +299,7 @@ const main = async () => {
   const pages = chunk(filtered, CARDS_PER_PAGE);
   const outDir = path.resolve(
     'exports',
-    `cards_${START_DATE}_to_${END_DATE}`.replaceAll(':', '-')
+    `cards_${START_DATE}_to_${END_DATE}_etalon`.replaceAll(':', '-')
   );
   await fs.mkdir(outDir, { recursive: true });
   const existing = await fs.readdir(outDir);
@@ -302,13 +312,13 @@ const main = async () => {
   for (let i = 0; i < pages.length; i += 1) {
     const html = renderSinglePageHtml(
       pages[i],
-      `Встречи ${START_DATE}..${END_DATE} - стр ${i + 1}`
+      `Встречи ${START_DATE}..${END_DATE} etalon - стр ${i + 1}`
     );
     const fileName = `page-${String(i + 1).padStart(2, '0')}.html`;
     await fs.writeFile(path.join(outDir, fileName), html, 'utf8');
   }
 
-  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE}`);
+  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE} etalon`);
   await fs.writeFile(path.join(outDir, 'all-pages.html'), fullHtml, 'utf8');
   await fs.writeFile(path.join(outDir, 'events.json'), JSON.stringify(filtered, null, 2), 'utf8');
 

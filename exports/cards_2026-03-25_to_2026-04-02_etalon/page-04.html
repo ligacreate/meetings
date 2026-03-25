@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Встречи 2026-03-25..2026-04-02 - стр 3</title>
+  <title>Встречи 2026-03-25..2026-04-02 etalon - стр 4</title>
   <style>
   * { box-sizing: border-box; }
   body {
@@ -16,46 +16,51 @@
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 26px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
+    border-radius: 30px;
     padding: 14px 16px 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
+  .top-row {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    min-height: 0;
   }
   .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
+    width: 76px;
+    height: 76px;
+    border-radius: 16px;
     object-fit: cover;
-    flex: 0 0 70px;
+    flex: 0 0 76px;
   }
   .thumb-fallback {
     background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
   }
-  .meta-wrap { flex: 1; min-width: 0; }
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
     margin-bottom: 8px;
   }
   .pill {
@@ -72,32 +77,38 @@
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     font-size: 20px;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 640;
     color: #111827;
   }
   .speaker {
     margin: 0 0 8px;
-    color: #687384;
+    color: #6a7484;
     font-size: 14px;
-    line-height: 1.25;
+    line-height: 1.2;
     font-weight: 450;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.36;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .more {
+    margin: 8px 0 0;
+    color: #6580aa;
+    font-size: 12px;
+    line-height: 1;
+    min-height: 12px;
+  }
   .bottom {
-    margin-top: 10px;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -128,18 +139,16 @@
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 </style>
 </head>
 <body>
   <main class="sheet">
     
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773062984410-19qIH0vDpZ1ZG5VW7puizVYcDUAYMsp6wKiNJnJ06UQ45OxsnilriEtI-iM0Ww5I.jpg" alt="Я живая" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -149,6 +158,7 @@
           <h2>Я живая</h2>
           <p class="speaker">Наталья Ильиных (Стажер)</p>
           <p class="desc">Встреча про начало весны внутри. Через письменные и творческие практики мы посмотрим, что хочется отпустить, где появляется энергия и какое намерение хочется вырастить этой весной.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -159,9 +169,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772536257337-dsc03953.jpg" alt="Расцветая в середине пути" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -171,6 +181,7 @@
           <h2>Расцветая в середине пути</h2>
           <p class="speaker">Odeta Suldiakova</p>
           <p class="desc">Поддерживающая письменная встреча для женщин, которые оказались в кризисе. Мы будем писать, чтобы услышать себя глубже. Через слова проявляется то, что трудно сказать вслух, приходит мягкая ясность. Встреча проходит онлайн, в теплой и...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -181,9 +192,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772478945362-event-images-1772478935136.jpg" alt="Предназначение ― существительное или глагол?" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -193,33 +204,12 @@
           <h2>Предназначение ― существительное или глагол?</h2>
           <p class="speaker">Елена Мельникова</p>
           <p class="desc">Как найти то самое, что ведёт нас в жизни? Профессия это ли? Любимое хобби ли? Что хочу? Что могу? И чем заниматься, чтобы чувствовать себя на своём пути. Как обрести свой смысл жизни. Подумаем, поразмышляем об этом.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
         <p class="price">1000 рублей</p>
         <a class="btn" href="@AneleRay" target="_blank" rel="noopener noreferrer">Записаться</a>
-      </div>
-    </article>
-  
-
-    <article class="card">
-      <div class="top">
-        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773678068518-Miranazarova-ru-97_resized.jpg" alt="Собиратели радости" loading="eager" />
-        <div class="meta-wrap">
-          <div class="meta-row">
-            <span class="pill">Встреча</span>
-            <span class="pill">• 28 марта</span>
-            <span class="pill">◷ 11:00</span>
-            <span class="pill">◉ Онлайн</span>
-          </div>
-          <h2>Собиратели радости</h2>
-          <p class="speaker">Шилова Мария</p>
-          <p class="desc">Давно ли вы находили повод для радости и празднования своих пусть даже небольших достижений? Радость это случайная награда детства или навык взрослого человека? На праздничной встрече в честь трехлетия ведения встреч Собиратели радости...</p>
-        </div>
-      </div>
-      <div class="bottom">
-        <p class="price">1000 рублей</p>
-        <a class="btn" href="https://t.me/M_Shilova" target="_blank" rel="noopener noreferrer">Записаться</a>
       </div>
     </article>
   

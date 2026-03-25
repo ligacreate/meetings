@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Встречи 2026-03-25..2026-04-02 - стр 1</title>
+  <title>Встречи 2026-03-25..2026-04-02 etalon - стр 1</title>
   <style>
   * { box-sizing: border-box; }
   body {
@@ -16,46 +16,51 @@
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 26px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
+    border-radius: 30px;
     padding: 14px 16px 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
+  .top-row {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    min-height: 0;
   }
   .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
+    width: 76px;
+    height: 76px;
+    border-radius: 16px;
     object-fit: cover;
-    flex: 0 0 70px;
+    flex: 0 0 76px;
   }
   .thumb-fallback {
     background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
   }
-  .meta-wrap { flex: 1; min-width: 0; }
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
     margin-bottom: 8px;
   }
   .pill {
@@ -72,32 +77,38 @@
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     font-size: 20px;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 640;
     color: #111827;
   }
   .speaker {
     margin: 0 0 8px;
-    color: #687384;
+    color: #6a7484;
     font-size: 14px;
-    line-height: 1.25;
+    line-height: 1.2;
     font-weight: 450;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.36;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .more {
+    margin: 8px 0 0;
+    color: #6580aa;
+    font-size: 12px;
+    line-height: 1;
+    min-height: 12px;
+  }
   .bottom {
-    margin-top: 10px;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -128,18 +139,16 @@
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 </style>
 </head>
 <body>
   <main class="sheet">
     
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773087598932-DSC09272.jpg" alt="Бульварные встречи" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 1 апреля</span>
@@ -149,6 +158,7 @@
           <h2>Бульварные встречи</h2>
           <p class="speaker">Екатерина Куропятникова</p>
           <p class="desc">Гуляем по бульварному кольцу и рядом. Замедляемся, восстанавливаем контакт с собой, с ритмом города и природы в нем. Пишем об итогах месяца и планах на следующий.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -159,9 +169,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774272235091-photo_2025-12-16_00-00-58.jpg" alt="Экватор недели. Весна внутри" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 1 апреля</span>
@@ -171,6 +181,7 @@
           <h2>Экватор недели. Весна внутри</h2>
           <p class="speaker">Мария Романова</p>
           <p class="desc">Еженедельная встреча-знакомство с письменными практиками в Москве. Определим, что нового принесла с собой весна. Что в жизни хочет проявиться благодаря ей? Какие привычки и ритуалы помогут осуществить задуманное?</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -181,45 +192,24 @@
   
 
     <article class="card">
-      <div class="top">
-        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773087443543-photo_2025-10-27_23-21-38.jpg" alt="Экватор недели: весна с вниманием к себе" loading="eager" />
-        <div class="meta-wrap">
+      <div class="top-row">
+        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774353131495-photo_2026-03-24_14-51-30.jpg" alt="1 апреля: выходной для серьезности" loading="eager" />
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
-            <span class="pill">• 25 марта</span>
-            <span class="pill">◷ 10:00</span>
-            <span class="pill">◉ Москва</span>
+            <span class="pill">• 1 апреля</span>
+            <span class="pill">◷ 16:00</span>
+            <span class="pill">◉ Санкт-Петербург</span>
           </div>
-          <h2>Экватор недели: весна с вниманием к себе</h2>
-          <p class="speaker">Екатерина Куропятникова</p>
-          <p class="desc">Еженедельная встреча-знакомство с письменными практиками в Москве. Будем размышлять о том, как провести эту весну с вниманием и заботой о себе, какие привычки и ритуалы внедрить для этого.</p>
+          <h2>1 апреля: выходной для серьезности</h2>
+          <p class="speaker">Елена Федотова</p>
+          <p class="desc">1 апреля мы вместе с Яной Соболевой ведущей из Петербурга приглашаем вас на встречу с письменными практиками, где официально снимем с себя обязанность быть «экспертными экспертами», «продуктивными достигаторами» и «серьезными взрослыми»....</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
-        <p class="price">Донат</p>
-        <a class="btn" href="https://t.me/katerinakurop" target="_blank" rel="noopener noreferrer">Записаться</a>
-      </div>
-    </article>
-  
-
-    <article class="card">
-      <div class="top">
-        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773681714661-DSC_6374.jpg" alt="Чайный четверг. Знакомство с письменными практиками" loading="eager" />
-        <div class="meta-wrap">
-          <div class="meta-row">
-            <span class="pill">Встреча</span>
-            <span class="pill">• 26 марта</span>
-            <span class="pill">◷ 11:00</span>
-            <span class="pill">◉ Симферополь</span>
-          </div>
-          <h2>Чайный четверг. Знакомство с письменными практиками</h2>
-          <p class="speaker">Ольга Пограницкая</p>
-          <p class="desc">Эта встреча-знакомство с форматом письменных практик. Без определенной темы. Каждый раз вас ждет приятный сюрприз и масса открытий. Встреча проходит в кафе города и длится 1 час. Мы пьем чай и пишем. Этот формат вам подойдет, если вы давно...</p>
-        </div>
-      </div>
-      <div class="bottom">
-        <p class="price">750 рублей</p>
-        <a class="btn" href="https://t.me/olgapogranitskaya" target="_blank" rel="noopener noreferrer">Записаться</a>
+        <p class="price">1000 рублей</p>
+        <a class="btn" href="https://t.me/Fedotova_elen" target="_blank" rel="noopener noreferrer">Записаться</a>
       </div>
     </article>
   

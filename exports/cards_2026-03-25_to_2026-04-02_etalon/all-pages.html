@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Встречи 2026-03-25..2026-04-02</title>
+  <title>Встречи 2026-03-25..2026-04-02 etalon</title>
   <style>
     
   * { box-sizing: border-box; }
@@ -17,46 +17,51 @@
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 26px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-rows: repeat(3, minmax(0, 1fr));
+    gap: 16px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
+    border-radius: 30px;
     padding: 14px 16px 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
+  .top-row {
     display: flex;
     align-items: flex-start;
     gap: 12px;
+    min-height: 0;
   }
   .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
+    width: 76px;
+    height: 76px;
+    border-radius: 16px;
     object-fit: cover;
-    flex: 0 0 70px;
+    flex: 0 0 76px;
   }
   .thumb-fallback {
     background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
   }
-  .meta-wrap { flex: 1; min-width: 0; }
+  .main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
     margin-bottom: 8px;
   }
   .pill {
@@ -73,32 +78,38 @@
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     font-size: 20px;
     line-height: 1.15;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 640;
     color: #111827;
   }
   .speaker {
     margin: 0 0 8px;
-    color: #687384;
+    color: #6a7484;
     font-size: 14px;
-    line-height: 1.25;
+    line-height: 1.2;
     font-weight: 450;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.36;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+  .more {
+    margin: 8px 0 0;
+    color: #6580aa;
+    font-size: 12px;
+    line-height: 1;
+    min-height: 12px;
+  }
   .bottom {
-    margin-top: 10px;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -129,9 +140,7 @@
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 
     body { background: #fff; }
     .page-break { break-after: page; page-break-after: always; }
@@ -143,9 +152,9 @@
       <section class="sheet page-break">
         
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773087598932-DSC09272.jpg" alt="Бульварные встречи" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 1 апреля</span>
@@ -155,6 +164,7 @@
           <h2>Бульварные встречи</h2>
           <p class="speaker">Екатерина Куропятникова</p>
           <p class="desc">Гуляем по бульварному кольцу и рядом. Замедляемся, восстанавливаем контакт с собой, с ритмом города и природы в нем. Пишем об итогах месяца и планах на следующий.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -165,9 +175,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774272235091-photo_2025-12-16_00-00-58.jpg" alt="Экватор недели. Весна внутри" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 1 апреля</span>
@@ -177,6 +187,7 @@
           <h2>Экватор недели. Весна внутри</h2>
           <p class="speaker">Мария Романова</p>
           <p class="desc">Еженедельная встреча-знакомство с письменными практиками в Москве. Определим, что нового принесла с собой весна. Что в жизни хочет проявиться благодаря ей? Какие привычки и ритуалы помогут осуществить задуманное?</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -187,9 +198,36 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
+        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774353131495-photo_2026-03-24_14-51-30.jpg" alt="1 апреля: выходной для серьезности" loading="eager" />
+        <div class="main">
+          <div class="meta-row">
+            <span class="pill">Встреча</span>
+            <span class="pill">• 1 апреля</span>
+            <span class="pill">◷ 16:00</span>
+            <span class="pill">◉ Санкт-Петербург</span>
+          </div>
+          <h2>1 апреля: выходной для серьезности</h2>
+          <p class="speaker">Елена Федотова</p>
+          <p class="desc">1 апреля мы вместе с Яной Соболевой ведущей из Петербурга приглашаем вас на встречу с письменными практиками, где официально снимем с себя обязанность быть «экспертными экспертами», «продуктивными достигаторами» и «серьезными взрослыми»....</p>
+          <p class="more">Читать далее</p>
+        </div>
+      </div>
+      <div class="bottom">
+        <p class="price">1000 рублей</p>
+        <a class="btn" href="https://t.me/Fedotova_elen" target="_blank" rel="noopener noreferrer">Записаться</a>
+      </div>
+    </article>
+  
+      </section>
+    
+
+      <section class="sheet page-break">
+        
+    <article class="card">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773087443543-photo_2025-10-27_23-21-38.jpg" alt="Экватор недели: весна с вниманием к себе" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 25 марта</span>
@@ -199,6 +237,7 @@
           <h2>Экватор недели: весна с вниманием к себе</h2>
           <p class="speaker">Екатерина Куропятникова</p>
           <p class="desc">Еженедельная встреча-знакомство с письменными практиками в Москве. Будем размышлять о том, как провести эту весну с вниманием и заботой о себе, какие привычки и ритуалы внедрить для этого.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -209,9 +248,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773681714661-DSC_6374.jpg" alt="Чайный четверг. Знакомство с письменными практиками" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 26 марта</span>
@@ -221,6 +260,7 @@
           <h2>Чайный четверг. Знакомство с письменными практиками</h2>
           <p class="speaker">Ольга Пограницкая</p>
           <p class="desc">Эта встреча-знакомство с форматом письменных практик. Без определенной темы. Каждый раз вас ждет приятный сюрприз и масса открытий. Встреча проходит в кафе города и длится 1 час. Мы пьем чай и пишем. Этот формат вам подойдет, если вы давно...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -229,15 +269,11 @@
       </div>
     </article>
   
-      </section>
-    
 
-      <section class="sheet page-break">
-        
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773587865019-event-images-1773587864838.jpg" alt="Моя весенняя история" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 27 марта</span>
@@ -247,6 +283,7 @@
           <h2>Моя весенняя история</h2>
           <p class="speaker">Баженова Наталья (Стажер)</p>
           <p class="desc">Приглашаю вас на завтрак «Моя весенняя история» - место, где мы: напишем стихи (легко и без правил), превратимся в цветок (прямо на бумаге), напишем карту весенних дел (от «увижу» до «начну»), проведем аукцион желаний (громко и радостно)....</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -255,11 +292,15 @@
       </div>
     </article>
   
+      </section>
+    
 
+      <section class="sheet page-break">
+        
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772478814836-event-images-1772478804685.jpg" alt="Предназначение ― существительное или глагол?" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 27 марта</span>
@@ -269,6 +310,7 @@
           <h2>Предназначение ― существительное или глагол?</h2>
           <p class="speaker">Елена Мельникова</p>
           <p class="desc">Как найти то самое, что ведёт нас в жизни? Профессия это ли? Любимое хобби ли? Что хочу? Что могу? И чем заниматься, чтобы чувствовать себя на своём пути. Как обрести свой смысл жизни. Подумаем, поразмышляем об этом.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -279,9 +321,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773677927708-Miranazarova-ru-102_resized.jpg" alt="Собиратели радости" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 27 марта</span>
@@ -291,6 +333,7 @@
           <h2>Собиратели радости</h2>
           <p class="speaker">Шилова Мария</p>
           <p class="desc">Давно ли вы находили повод для радости и празднования своих пусть даже небольших достижений? Радость это случайная награда детства или навык взрослого человека? На праздничной встрече в честь трехлетия ведения встреч Собиратели радости...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -301,9 +344,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772551508884-IMG_2291.jpg" alt="Утренние страницы " loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -315,6 +358,7 @@
           <p class="desc">Еженедельная встреча-рефлексия с письменными практиками. 
 Больше легкости, меньше самокопания. 
 Блокнот, ручка и вопросы, попадающие точно в цель - это про честность.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -329,9 +373,9 @@
       <section class="sheet page-break">
         
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773062984410-19qIH0vDpZ1ZG5VW7puizVYcDUAYMsp6wKiNJnJ06UQ45OxsnilriEtI-iM0Ww5I.jpg" alt="Я живая" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -341,6 +385,7 @@
           <h2>Я живая</h2>
           <p class="speaker">Наталья Ильиных (Стажер)</p>
           <p class="desc">Встреча про начало весны внутри. Через письменные и творческие практики мы посмотрим, что хочется отпустить, где появляется энергия и какое намерение хочется вырастить этой весной.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -351,9 +396,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772536257337-dsc03953.jpg" alt="Расцветая в середине пути" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -363,6 +408,7 @@
           <h2>Расцветая в середине пути</h2>
           <p class="speaker">Odeta Suldiakova</p>
           <p class="desc">Поддерживающая письменная встреча для женщин, которые оказались в кризисе. Мы будем писать, чтобы услышать себя глубже. Через слова проявляется то, что трудно сказать вслух, приходит мягкая ясность. Встреча проходит онлайн, в теплой и...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -373,9 +419,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772478945362-event-images-1772478935136.jpg" alt="Предназначение ― существительное или глагол?" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -385,33 +431,12 @@
           <h2>Предназначение ― существительное или глагол?</h2>
           <p class="speaker">Елена Мельникова</p>
           <p class="desc">Как найти то самое, что ведёт нас в жизни? Профессия это ли? Любимое хобби ли? Что хочу? Что могу? И чем заниматься, чтобы чувствовать себя на своём пути. Как обрести свой смысл жизни. Подумаем, поразмышляем об этом.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
         <p class="price">1000 рублей</p>
         <a class="btn" href="@AneleRay" target="_blank" rel="noopener noreferrer">Записаться</a>
-      </div>
-    </article>
-  
-
-    <article class="card">
-      <div class="top">
-        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773678068518-Miranazarova-ru-97_resized.jpg" alt="Собиратели радости" loading="eager" />
-        <div class="meta-wrap">
-          <div class="meta-row">
-            <span class="pill">Встреча</span>
-            <span class="pill">• 28 марта</span>
-            <span class="pill">◷ 11:00</span>
-            <span class="pill">◉ Онлайн</span>
-          </div>
-          <h2>Собиратели радости</h2>
-          <p class="speaker">Шилова Мария</p>
-          <p class="desc">Давно ли вы находили повод для радости и празднования своих пусть даже небольших достижений? Радость это случайная награда детства или навык взрослого человека? На праздничной встрече в честь трехлетия ведения встреч Собиратели радости...</p>
-        </div>
-      </div>
-      <div class="bottom">
-        <p class="price">1000 рублей</p>
-        <a class="btn" href="https://t.me/M_Shilova" target="_blank" rel="noopener noreferrer">Записаться</a>
       </div>
     </article>
   
@@ -421,9 +446,32 @@
       <section class="sheet page-break">
         
     <article class="card">
-      <div class="top">
+      <div class="top-row">
+        <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773678068518-Miranazarova-ru-97_resized.jpg" alt="Собиратели радости" loading="eager" />
+        <div class="main">
+          <div class="meta-row">
+            <span class="pill">Встреча</span>
+            <span class="pill">• 28 марта</span>
+            <span class="pill">◷ 11:00</span>
+            <span class="pill">◉ Онлайн</span>
+          </div>
+          <h2>Собиратели радости</h2>
+          <p class="speaker">Шилова Мария</p>
+          <p class="desc">Давно ли вы находили повод для радости и празднования своих пусть даже небольших достижений? Радость это случайная награда детства или навык взрослого человека? На праздничной встрече в честь трехлетия ведения встреч Собиратели радости...</p>
+          <p class="more">Читать далее</p>
+        </div>
+      </div>
+      <div class="bottom">
+        <p class="price">1000 рублей</p>
+        <a class="btn" href="https://t.me/M_Shilova" target="_blank" rel="noopener noreferrer">Записаться</a>
+      </div>
+    </article>
+  
+
+    <article class="card">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774295563885-photo_5337077077166986258_y.jpg" alt="Точка перехода: мой вектор на новый сезон." loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 28 марта</span>
@@ -433,6 +481,7 @@
           <h2>Точка перехода: мой вектор на новый сезон.</h2>
           <p class="speaker">Рухшана (Стажер)</p>
           <p class="desc">Встреча-переход, точка,  в которой можно остановиться, выдохнуть и честно увидеть свою  «дорогу» на ближайшие месяцы. Весна - время перемен! Через письменные практики вы исследуете свои желания, ценности  и внутренние опоры, наметите...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -443,9 +492,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772479029435-event-images-1772479019054.jpg" alt="Предназначение ― существительное или глагол?" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 29 марта</span>
@@ -455,6 +504,7 @@
           <h2>Предназначение ― существительное или глагол?</h2>
           <p class="speaker">Елена Мельникова</p>
           <p class="desc">Как найти то самое, что ведёт нас в жизни? Профессия это ли? Любимое хобби ли? Что хочу? Что могу? И чем заниматься, чтобы чувствовать себя на своём пути. Как обрести свой смысл жизни. Подумаем, поразмышляем об этом.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -463,11 +513,15 @@
       </div>
     </article>
   
+      </section>
+    
 
+      <section class="sheet page-break">
+        
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774263478072-1774263168640.jpg" alt="Влюбиться в себя заново" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 29 марта</span>
@@ -478,6 +532,7 @@
           <p class="speaker">Юлия Громова (Стажер)</p>
           <p class="desc">Мы создадим свою уникальную вселенную и вспомним о своей неповторимости. 
 Приходите, чтобы вновь полюбить себя и взглянуть на свою жизнь с новой стороны.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -488,9 +543,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774333725107-31756.jpg" alt="Остановка в пути" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 29 марта</span>
@@ -502,6 +557,7 @@
           <p class="desc">Уже почти прошла 1/4 года, а поставленные на год цели выполнены сильно меньше, чем на 25% и вы «грызете» себя за это? Если у вас так же - приглашаю.
 
 Встреча-остановка задумана мной не просто так. Я много общаюсь и вижу, что конец...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -510,15 +566,11 @@
       </div>
     </article>
   
-      </section>
-    
 
-      <section class="sheet ">
-        
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774296684794-photo_5337077077166986258_y.jpg" alt="Точка перехода: мой вектор на новый сезон." loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 29 марта</span>
@@ -528,6 +580,7 @@
           <h2>Точка перехода: мой вектор на новый сезон.</h2>
           <p class="speaker">Рухшана (Стажер)</p>
           <p class="desc">Встреча-переход, точка,  в которой можно остановиться, выдохнуть и честно увидеть свою  «дорогу» на ближайшие месяцы. Весна - время перемен! Через письменные практики вы исследуете свои желания, ценности  и внутренние опоры, наметите...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -536,11 +589,15 @@
       </div>
     </article>
   
+      </section>
+    
 
+      <section class="sheet ">
+        
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1774272420021-photo_2025-12-15_23-29-37.jpg" alt="Расцветая внутри" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 29 марта</span>
@@ -552,6 +609,7 @@
           <p class="desc">Какие семена вы хотите посадить этой весной? Как лучше подготовить для этого почву?
 При помощи письменных и арт-практик мы исследуем, что стоит отпустить, чтобы дать дорогу новому.
 Обнаружим, какое намерение хочется вырастить. И определим,...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">
@@ -562,9 +620,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1773238545898-IMG_2291.jpg" alt="Утренние страницы" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 31 марта</span>
@@ -576,6 +634,7 @@
           <p class="desc">Еженедельная встреча-рефлексия с письменными практиками. 
 Больше легкости, меньше самокопания. 
 Блокнот, ручка и вопросы, попадающие точно в цель - это про честность.</p>
+          <p class="more">&nbsp;</p>
         </div>
       </div>
       <div class="bottom">
@@ -586,9 +645,9 @@
   
 
     <article class="card">
-      <div class="top">
+      <div class="top-row">
         <img class="thumb" src="https://garden-media.s3.twcstorage.ru/event-images/1772547888793-4896D867-DCA1-4BFC-BA80-63F2F616D397.jpg" alt="Заполнение блокнотов" loading="eager" />
-        <div class="meta-wrap">
+        <div class="main">
           <div class="meta-row">
             <span class="pill">Встреча</span>
             <span class="pill">• 31 марта</span>
@@ -598,6 +657,7 @@
           <h2>Заполнение блокнотов</h2>
           <p class="speaker">Мария Бардина (Стажер)</p>
           <p class="desc">Весь март, каждый вторник, мы встречаемся в эфире, чтобы просто писать. Без слов, без фасилитации — только вы, ваш блокнот и приятная музыка. Ссылку на встречу опубликуем в телеграм канале Домашнего издательства Скребейко...</p>
+          <p class="more">Читать далее</p>
         </div>
       </div>
       <div class="bottom">

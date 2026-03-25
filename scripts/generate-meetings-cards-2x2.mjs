@@ -5,7 +5,7 @@ const API_BASE = process.env.POSTGREST_URL || 'https://api.skrebeyko.ru/';
 const START_DATE = process.argv[2] || '2026-03-25';
 const END_DATE = process.argv[3] || '2026-04-02';
 const CARDS_PER_PAGE = 4;
-const DESCRIPTION_MAX = 240;
+const DESCRIPTION_MAX = 220;
 
 const normalizeDate = (dateStr = '') => {
   const iso = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -57,23 +57,23 @@ const renderCard = (event) => {
 
   return `
     <article class="card">
-      <div class="top">
+      <div class="image-wrap">
         ${
           imageUrl
-            ? `<img class="thumb" src="${imageUrl}" alt="${title}" loading="eager" />`
-            : '<div class="thumb thumb-fallback"></div>'
+            ? `<img class="cover" src="${imageUrl}" alt="${title}" loading="eager" />`
+            : '<div class="cover cover-fallback"></div>'
         }
-        <div class="meta-wrap">
-          <div class="meta-row">
-            <span class="pill">${category}</span>
-            <span class="pill">• ${escapeHtml(dateLabel)}</span>
-            <span class="pill">◷ ${time}</span>
-            <span class="pill">◉ ${city}</span>
-          </div>
-          <h2>${title}</h2>
-          <p class="speaker">${speaker}</p>
-          <p class="desc">${escapeHtml(description)}</p>
+        <span class="category-pill">${category}</span>
+      </div>
+      <div class="content">
+        <div class="meta-row">
+          <span class="pill">• ${escapeHtml(dateLabel)}</span>
+          <span class="pill">◷ ${time}</span>
+          <span class="pill">◉ ${city}</span>
         </div>
+        <h2>${title}</h2>
+        <p class="speaker">${speaker}</p>
+        <p class="desc">${escapeHtml(description)}</p>
       </div>
       <div class="bottom">
         <p class="price">${price}</p>
@@ -98,88 +98,110 @@ const baseCss = `
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 24px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
-    padding: 14px 16px 12px;
+    border-radius: 28px 28px 8px 8px;
+    padding: 14px 14px 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
+    display: grid;
+    grid-template-rows: 182px minmax(0, 1fr) auto;
+    gap: 8px;
+    min-height: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  .image-wrap {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 182px;
+    flex: 0 0 auto;
+  }
+  .cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .cover-fallback {
+    background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
+  }
+  .category-pill {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #3f4a5a;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid rgba(231, 234, 241, 0.9);
+  }
+  .content {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-  }
-  .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
-    object-fit: cover;
-    flex: 0 0 70px;
-  }
-  .thumb-fallback {
-    background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
-  }
-  .meta-wrap { flex: 1; min-width: 0; }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 6px;
     margin-bottom: 8px;
   }
   .pill {
     display: inline-flex;
     align-items: center;
-    height: 22px;
-    padding: 0 8px;
+    height: 24px;
+    padding: 0 9px;
     border-radius: 999px;
     border: 1px solid #ebedf2;
     background: #f8f9fb;
     color: #5f6b7a;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
-    font-size: 20px;
-    line-height: 1.15;
+    margin: 0 0 4px;
+    font-size: 22px;
+    line-height: 1.14;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 620;
     color: #111827;
   }
   .speaker {
     margin: 0 0 8px;
     color: #687384;
-    font-size: 14px;
+    font-size: 15px;
     line-height: 1.25;
     font-weight: 450;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.35;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 7;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .bottom {
-    margin-top: 10px;
+    margin-top: 0;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -189,7 +211,7 @@ const baseCss = `
   }
   .price {
     margin: 0;
-    font-size: 16px;
+    font-size: 17px;
     line-height: 1;
     font-weight: 650;
     color: #101828;
@@ -199,20 +221,18 @@ const baseCss = `
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 110px;
-    height: 34px;
+    min-width: 116px;
+    height: 36px;
     border-radius: 999px;
     background: #5778a9;
     color: #fff;
     text-decoration: none;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 `;
 
 const renderSinglePageHtml = (eventsChunk, title) => `
@@ -289,7 +309,7 @@ const main = async () => {
   const pages = chunk(filtered, CARDS_PER_PAGE);
   const outDir = path.resolve(
     'exports',
-    `cards_${START_DATE}_to_${END_DATE}`.replaceAll(':', '-')
+    `cards_${START_DATE}_to_${END_DATE}_2x2`.replaceAll(':', '-')
   );
   await fs.mkdir(outDir, { recursive: true });
   const existing = await fs.readdir(outDir);
@@ -302,13 +322,13 @@ const main = async () => {
   for (let i = 0; i < pages.length; i += 1) {
     const html = renderSinglePageHtml(
       pages[i],
-      `Встречи ${START_DATE}..${END_DATE} - стр ${i + 1}`
+      `Встречи ${START_DATE}..${END_DATE} 2x2 - стр ${i + 1}`
     );
     const fileName = `page-${String(i + 1).padStart(2, '0')}.html`;
     await fs.writeFile(path.join(outDir, fileName), html, 'utf8');
   }
 
-  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE}`);
+  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE} 2x2`);
   await fs.writeFile(path.join(outDir, 'all-pages.html'), fullHtml, 'utf8');
   await fs.writeFile(path.join(outDir, 'events.json'), JSON.stringify(filtered, null, 2), 'utf8');
 

@@ -10,7 +10,7 @@ import { compressImage } from '@/lib/imageUtils';
 import { postgrestRequest } from '@/lib/postgrest';
 import { Event } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
-import { resolveCityTimeZone } from '@/lib/dateUtils';
+import { resolveCityTimeZone, normalizeEventTimeLabel } from '@/lib/dateUtils';
 
 interface EventsAdminProps {
   events: Event[];
@@ -74,7 +74,7 @@ const EditableEventCard = ({ event, index, editingEvent, onEdit, onDelete, loadi
       <h4 className="font-semibold text-foreground truncate">{event.title}</h4>
       <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1">
         <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {formatEventDate(event.date)}</span>
-        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {event.time}</span>
+        <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {normalizeEventTimeLabel(event.time)}</span>
         <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {event.city}</span>
       </div>
       {showDebug && (

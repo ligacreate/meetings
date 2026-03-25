@@ -5,7 +5,7 @@ const API_BASE = process.env.POSTGREST_URL || 'https://api.skrebeyko.ru/';
 const START_DATE = process.argv[2] || '2026-03-25';
 const END_DATE = process.argv[3] || '2026-04-02';
 const CARDS_PER_PAGE = 4;
-const DESCRIPTION_MAX = 240;
+const DESCRIPTION_MAX = 210;
 
 const normalizeDate = (dateStr = '') => {
   const iso = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
@@ -57,23 +57,23 @@ const renderCard = (event) => {
 
   return `
     <article class="card">
-      <div class="top">
+      <div class="cover-wrap">
         ${
           imageUrl
-            ? `<img class="thumb" src="${imageUrl}" alt="${title}" loading="eager" />`
-            : '<div class="thumb thumb-fallback"></div>'
+            ? `<img class="cover" src="${imageUrl}" alt="${title}" loading="eager" />`
+            : '<div class="cover cover-fallback"></div>'
         }
-        <div class="meta-wrap">
-          <div class="meta-row">
-            <span class="pill">${category}</span>
-            <span class="pill">• ${escapeHtml(dateLabel)}</span>
-            <span class="pill">◷ ${time}</span>
-            <span class="pill">◉ ${city}</span>
-          </div>
-          <h2>${title}</h2>
-          <p class="speaker">${speaker}</p>
-          <p class="desc">${escapeHtml(description)}</p>
+        <span class="category-pill">${category}</span>
+      </div>
+      <div class="content">
+        <div class="meta-row">
+          <span class="pill">• ${escapeHtml(dateLabel)}</span>
+          <span class="pill">◷ ${time}</span>
+          <span class="pill">◉ ${city}</span>
         </div>
+        <h2>${title}</h2>
+        <p class="speaker">${speaker}</p>
+        <p class="desc">${escapeHtml(description)}</p>
       </div>
       <div class="bottom">
         <p class="price">${price}</p>
@@ -98,42 +98,63 @@ const baseCss = `
   .sheet {
     width: 1080px;
     height: 1350px;
-    padding: 30px;
+    padding: 24px;
     margin: 0 auto;
     background: linear-gradient(180deg, #f8edf1 0%, #f1e4e9 100%);
     display: grid;
-    grid-template-rows: repeat(4, minmax(0, 1fr));
-    gap: 12px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 14px;
   }
   .card {
     background: #fff;
     border: 1px solid #e8e9ee;
-    border-radius: 24px;
-    padding: 14px 16px 12px;
+    border-radius: 26px;
+    padding: 12px;
     box-shadow: 0 10px 24px -18px rgba(0, 0, 0, 0.3);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    display: grid;
+    grid-template-rows: 172px minmax(0, 1fr) auto;
+    gap: 8px;
     height: 100%;
     min-height: 0;
     overflow: hidden;
   }
-  .top {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
+  .cover-wrap {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    height: 172px;
   }
-  .thumb {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
+  .cover {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
-    flex: 0 0 70px;
+    display: block;
   }
-  .thumb-fallback {
+  .cover-fallback {
     background: linear-gradient(135deg, #e6e7ee 0%, #d8dbe4 100%);
   }
-  .meta-wrap { flex: 1; min-width: 0; }
+  .category-pill {
+    position: absolute;
+    top: 9px;
+    left: 9px;
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #3f4a5a;
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid rgba(231, 234, 241, 0.9);
+  }
+  .content {
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
   .meta-row {
     display: flex;
     flex-wrap: wrap;
@@ -154,32 +175,39 @@ const baseCss = `
     white-space: nowrap;
   }
   h2 {
-    margin: 0 0 3px;
+    margin: 0 0 4px;
     font-size: 20px;
-    line-height: 1.15;
+    line-height: 1.14;
     letter-spacing: -0.02em;
-    font-weight: 650;
+    font-weight: 620;
     color: #111827;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .speaker {
     margin: 0 0 8px;
     color: #687384;
     font-size: 14px;
-    line-height: 1.25;
+    line-height: 1.22;
     font-weight: 450;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   .desc {
     margin: 0;
     color: #4f5c6e;
     font-size: 13px;
-    line-height: 1.35;
+    line-height: 1.34;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
   .bottom {
-    margin-top: 10px;
     border-top: 1px solid #eceef3;
     padding-top: 10px;
     display: flex;
@@ -210,9 +238,7 @@ const baseCss = `
     padding: 0 12px;
     white-space: nowrap;
   }
-  .btn-muted {
-    opacity: 0.55;
-  }
+  .btn-muted { opacity: 0.55; }
 `;
 
 const renderSinglePageHtml = (eventsChunk, title) => `
@@ -289,7 +315,7 @@ const main = async () => {
   const pages = chunk(filtered, CARDS_PER_PAGE);
   const outDir = path.resolve(
     'exports',
-    `cards_${START_DATE}_to_${END_DATE}`.replaceAll(':', '-')
+    `cards_${START_DATE}_to_${END_DATE}_4grid`.replaceAll(':', '-')
   );
   await fs.mkdir(outDir, { recursive: true });
   const existing = await fs.readdir(outDir);
@@ -302,13 +328,13 @@ const main = async () => {
   for (let i = 0; i < pages.length; i += 1) {
     const html = renderSinglePageHtml(
       pages[i],
-      `Встречи ${START_DATE}..${END_DATE} - стр ${i + 1}`
+      `Встречи ${START_DATE}..${END_DATE} 4grid - стр ${i + 1}`
     );
     const fileName = `page-${String(i + 1).padStart(2, '0')}.html`;
     await fs.writeFile(path.join(outDir, fileName), html, 'utf8');
   }
 
-  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE}`);
+  const fullHtml = renderMultiPageHtml(pages, `Встречи ${START_DATE}..${END_DATE} 4grid`);
   await fs.writeFile(path.join(outDir, 'all-pages.html'), fullHtml, 'utf8');
   await fs.writeFile(path.join(outDir, 'events.json'), JSON.stringify(filtered, null, 2), 'utf8');
 

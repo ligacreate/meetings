@@ -125,6 +125,56 @@ const getCityOffsetHours = (city: string = 'Москва'): number => {
   return 3;
 };
 
+const extractDateParts = (dateStr: string): { year: number; month: number; day: number } | null => {
+  if (!dateStr) return null;
+
+  const trimmed = dateStr.trim();
+  const iso = trimmed.match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (iso) {
+    const year = Number(iso[1]);
+    const month = Number(iso[2]);
+    const day = Number(iso[3]);
+    if ([year, month, day].some(Number.isNaN)) return null;
+    return { year, month, day };
+  }
+
+  const ru = trimmed.match(/(\d{2})\.(\d{2})\.(\d{4})/);
+  if (ru) {
+    const day = Number(ru[1]);
+    const month = Number(ru[2]);
+    const year = Number(ru[3]);
+    if ([year, month, day].some(Number.isNaN)) return null;
+    return { year, month, day };
+  }
+
+  return null;
+};
+
+const extractTimeParts = (timeStr: string): { hours: number; minutes: number } | null => {
+  if (!timeStr) return null;
+
+  const normalized = timeStr
+    .trim()
+    .replace(/[.]/g, ':')
+    .replace(/[—–]/g, '-');
+
+  const match = normalized.match(/(\d{1,2}):(\d{2})(?::\d{2})?/);
+  if (!match) return null;
+
+  const hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+
+  return { hours, minutes };
+};
+
+export const normalizeEventTimeLabel = (timeStr: string): string => {
+  const parts = extractTimeParts(timeStr);
+  if (!parts) return timeStr;
+  return `${String(parts.hours).padStart(2, '0')}:${String(parts.minutes).padStart(2, '0')}`;
+};
+
 /**
  * Parses a date string (YYYY-MM-DD or DD.MM.YYYY) and time string (HH:MM),
  * considering the city's timezone. Returns a Date or null if invalid.
@@ -137,25 +187,11 @@ const getCityOffsetHours = (city: string = 'Москва'): number => {
 export const parseEventDate = (dateStr: string, timeStr: string, city: string = 'Москва'): Date | null => {
   if (!dateStr || !timeStr) return null;
 
-  const iso = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  const ru = dateStr.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
-  let normalizedDate = dateStr;
-  if (ru) normalizedDate = `${ru[3]}-${ru[2]}-${ru[1]}`;
-  if (iso) normalizedDate = `${iso[1]}-${iso[2]}-${iso[3]}`;
-
-  const dateParts = normalizedDate.split('-').map(Number);
-  if (dateParts.length !== 3 || dateParts.some(Number.isNaN)) return null;
-  const [year, month, day] = dateParts;
-
-  const normalizedTime = timeStr
-    .trim()
-    .replace('.', ':')
-    .match(/(\d{1,2}):(\d{2})/);
-  const timeMatch = normalizedTime ? [normalizedTime[0], normalizedTime[1], normalizedTime[2]] : null;
-  if (!timeMatch) return null;
-  const hours = Number(timeMatch[1]);
-  const minutes = Number(timeMatch[2]);
-  if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
+  const dateParts = extractDateParts(dateStr);
+  const timeParts = extractTimeParts(timeStr);
+  if (!dateParts || !timeParts) return null;
+  const { year, month, day } = dateParts;
+  const { hours, minutes } = timeParts;
 
   const offsetHours = getCityOffsetHours(city);
 
@@ -220,34 +256,10 @@ const parseDateTimeParts = (
   dateStr: string,
   timeStr: string
 ): { year: number; month: number; day: number; hours: number; minutes: number } | null => {
-  if (!dateStr || !timeStr) return null;
-
-  const iso = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  const ru = dateStr.match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
-
-  let year = 0;
-  let month = 0;
-  let day = 0;
-  if (iso) {
-    year = Number(iso[1]);
-    month = Number(iso[2]);
-    day = Number(iso[3]);
-  } else if (ru) {
-    day = Number(ru[1]);
-    month = Number(ru[2]);
-    year = Number(ru[3]);
-  } else {
-    return null;
-  }
-
-  const timeMatch = timeStr.trim().replace('.', ':').match(/^(\d{1,2}):(\d{2})$/);
-  if (!timeMatch) return null;
-  const hours = Number(timeMatch[1]);
-  const minutes = Number(timeMatch[2]);
-
-  if ([year, month, day, hours, minutes].some(Number.isNaN)) return null;
-
-  return { year, month, day, hours, minutes };
+  const dateParts = extractDateParts(dateStr);
+  const timeParts = extractTimeParts(timeStr);
+  if (!dateParts || !timeParts) return null;
+  return { ...dateParts, ...timeParts };
 };
 
 const zonedDateTimeToUtc = (
@@ -292,7 +304,9 @@ export const formatEventDateTimeForViewer = (
   if (!utcDate || Number.isNaN(utcDate.getTime())) {
     return {
       dateLabel: dateStr,
-      timeLabel: sourceTz ? timeStr : formatEventTime(dateStr, timeStr, city)
+      timeLabel: sourceTz
+        ? normalizeEventTimeLabel(timeStr)
+        : formatEventTime(dateStr, timeStr, city)
     };
   }
 
