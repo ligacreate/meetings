@@ -1,7 +1,6 @@
 import { useState, useMemo } from 'react';
 import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import MapView from './MapView';
 import { getMonthGenitive, getMonthNominative, formatEventDateTimeForCityAndMoscow } from '@/lib/dateUtils';
 import { Event } from '@/types';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -73,7 +72,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState<ViewMode>('month');
-  const [showMap, setShowMap] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [filterByDate, setFilterByDate] = useState(false);
   const [expandedEventIds, setExpandedEventIds] = useState<Set<number>>(() => new Set());
@@ -201,10 +199,6 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
   const daysInMonth = getDaysInMonth(currentDate);
   const firstDay = getFirstDayOfMonth(currentDate);
   const weekDays = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-
-  if (showMap) {
-    return <MapView events={events} cities={cities} onClose={() => setShowMap(false)} />;
-  }
 
   return (
     <div className="space-y-8">
