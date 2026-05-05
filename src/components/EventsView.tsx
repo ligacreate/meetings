@@ -366,7 +366,7 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
             </h3>
             {(selectedCity !== ALL_CITY || filterByDate) && (
               <button
-                onClick={() => { setSelectedCity(ALL_CITY); setFilterByDate(false); setShowAllCities(false); }}
+                onClick={() => { setSelectedCity(ALL_CITY); setFilterByDate(false); }}
                 className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
               >
                 <X className="w-3 h-3" /> Сбросить
