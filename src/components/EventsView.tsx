@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown } from 'lucide-react';
+import { MapPin, Clock, ChevronLeft, ChevronRight, X, Calendar as CalendarIcon, Globe, Check, ChevronsUpDown, MessageCircle } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { getMonthGenitive, getMonthNominative, formatEventDateTimeForCityAndMoscow } from '@/lib/dateUtils';
 import { Event } from '@/types';
@@ -25,6 +25,47 @@ type ViewMode = 'day' | 'week' | 'month';
 const ALL_CITY = 'Все';
 const ONLINE_CITY = 'Онлайн';
 const DESCRIPTION_PREVIEW_LENGTH = 240;
+
+// Defence-in-depth для href: пускаем только https и whitelisted-префиксы
+// (TG / VK личные сообщения). Любой невалидный URL → undefined → кнопка
+// не рендерится. Закрывает AUDIT P1-2 (XSS via javascript: или любая
+// другая схема в registration_link / host_*).
+const HREF_WHITELIST = ['https://t.me/', 'https://vk.me/'];
+
+// Pill-стиль в тон meetings (как кнопка «Почитать больше» в NotebooksView):
+// neutral в покое, primary на hover, без border. Smooth-переход 300 ms.
+const CONTACT_BUTTON_CLASS =
+  "flex-1 flex items-center justify-center gap-2 " +
+  "px-5 py-2 rounded-full " +
+  "bg-secondary hover:bg-primary " +
+  "text-secondary-foreground hover:text-primary-foreground " +
+  "text-sm font-medium " +
+  "transition-all duration-300";
+
+const safeHref = (url: string | undefined): string | undefined => {
+  if (!url) return undefined;
+  try {
+    const u = new URL(url);
+    if (u.protocol !== 'https:') return undefined;
+    return HREF_WHITELIST.some(prefix => url.startsWith(prefix)) ? url : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+// VK brand glyph (simple-icons), упрощённый до одного path. currentColor
+// наследует цвет от родителя через text-* класс tailwind.
+const VkIcon = ({ className }: { className?: string }) => (
+  <svg
+    role="img"
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+    className={className}
+    fill="currentColor"
+  >
+    <path d="M15.07 2H8.93C3.33 2 2 3.33 2 8.93v6.14C2 20.67 3.33 22 8.93 22h6.14c5.6 0 6.93-1.33 6.93-6.93V8.93C22 3.33 20.66 2 15.07 2Zm3.07 14.27h-1.46c-.55 0-.72-.44-1.71-1.43-.86-.83-1.24-.94-1.45-.94-.3 0-.39.08-.39.5v1.31c0 .36-.11.57-1.06.57-1.57 0-3.31-.95-4.53-2.72-1.84-2.58-2.34-4.51-2.34-4.91 0-.22.08-.42.5-.42h1.46c.38 0 .52.17.66.58.71 2.07 1.91 3.88 2.4 3.88.19 0 .27-.08.27-.56V10.5c-.06-.99-.58-1.07-.58-1.42 0-.17.14-.34.36-.34h2.3c.32 0 .43.17.43.55v2.89c0 .32.14.43.23.43.19 0 .35-.11.7-.46 1.07-1.2 1.84-3.04 1.84-3.04.1-.22.27-.42.65-.42h1.46c.44 0 .53.22.44.55-.18.84-1.94 3.32-1.94 3.32-.15.24-.21.36 0 .64.16.21.66.64 1 1.03.61.7 1.08 1.29 1.21 1.69.13.42-.08.63-.5.63Z" />
+  </svg>
+);
 
 const truncateAtWordBoundary = (text: string, maxLength: number): string => {
   if (text.length <= maxLength) return text;
@@ -488,16 +529,42 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             {event.price || 'Бесплатно'}
                           </div>
 
-                          {event.registration_link && (
-                            <a
-                              href={event.registration_link}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="w-full px-6 py-4 rounded-[1.5rem] bg-primary text-primary-foreground text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 hover:shadow-primary/30 flex items-center justify-center gap-2"
-                            >
-                              Записаться
-                            </a>
-                          )}
+                          {(() => {
+                            const tgHref = safeHref(event.host_telegram);
+                            const vkHref = safeHref(event.host_vk);
+                            // По контракту Garden host_telegram непуст у всех events.
+                            // Если safeHref вернул undefined — нарушение contract'а
+                            // или невалидный URL → defence-in-depth, кнопку не рендерим.
+                            if (!tgHref && !vkHref) return null;
+                            return (
+                              <div className="flex flex-col sm:flex-row gap-2">
+                                {tgHref && (
+                                  <a
+                                    href={tgHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Написать ведущей в Telegram"
+                                    className={CONTACT_BUTTON_CLASS}
+                                  >
+                                    <MessageCircle className="w-4 h-4" />
+                                    <span>Telegram</span>
+                                  </a>
+                                )}
+                                {vkHref && (
+                                  <a
+                                    href={vkHref}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    aria-label="Написать ведущей в ВКонтакте"
+                                    className={CONTACT_BUTTON_CLASS}
+                                  >
+                                    <VkIcon className="w-4 h-4" />
+                                    <span>ВКонтакте</span>
+                                  </a>
+                                )}
+                              </div>
+                            );
+                          })()}
                         </div>
                       </div>
                     </motion.div>

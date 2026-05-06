@@ -10,6 +10,8 @@ export interface Event {
     description: string;
     location: string;
     speaker: string;
+    host_telegram: string;
+    host_vk: string;
     registration_link?: string;
     price?: string;
     image_url?: string;
