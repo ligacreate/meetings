@@ -1,4 +1,4 @@
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect } from 'react';
 import EventsView from '@/components/EventsView';
 import { Event, Notebook } from '@/types';
 import ReflectionView from '@/components/ReflectionView';
@@ -6,15 +6,7 @@ import NotebooksView from '@/components/NotebooksView';
 import { useToast } from '@/hooks/use-toast';
 import MainLayout from '@/components/layout/MainLayout';
 
-// Lazy load AdminView
-const AdminView = lazy(() => import('@/components/AdminView'));
-
-interface IndexProps {
-  adminMode?: boolean;
-}
-
-const Index = ({ adminMode = false }: IndexProps) => {
-  const [showAdmin, setShowAdmin] = useState(adminMode);
+const Index = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [questions, setQuestions] = useState<string[]>([]);
   const [cities, setCities] = useState<string[]>(['Все']);
@@ -132,13 +124,6 @@ const Index = ({ adminMode = false }: IndexProps) => {
 
     return { data: all, count: totalCount };
   };
-
-  // Update showAdmin if adminMode prop changes
-  useEffect(() => {
-    if (adminMode) {
-      setShowAdmin(true);
-    }
-  }, [adminMode]);
 
   // Cache keys with version to invalidate old cache
   const CACHE_VERSION = 'v3';
@@ -311,31 +296,6 @@ const Index = ({ adminMode = false }: IndexProps) => {
       }
     }
   };
-
-  if (showAdmin) {
-    return (
-      <MainLayout>
-        <Suspense fallback={
-          <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        }>
-          <AdminView
-            events={events}
-            questions={questions}
-            cities={cities.filter(c => c !== 'Все')}
-            notebooks={notebooks}
-            onEventsChange={setEvents}
-            onQuestionsChange={setQuestions}
-            onCitiesChange={(newCities) => setCities(['Все', ...newCities])}
-            onNotebooksChange={setNotebooks}
-            onBack={() => setShowAdmin(false)}
-            onDataReload={() => loadData(1, true)}
-          />
-        </Suspense>
-      </MainLayout>
-    );
-  }
 
   if (loading) {
     return (
