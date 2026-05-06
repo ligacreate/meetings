@@ -104,7 +104,7 @@ const Index = () => {
       const { data, count } = await postgrestFetch<Event[]>(
         'events',
         {
-          select: 'id, garden_id, title, description, date, time, city, source_timezone, location, speaker, category, registration_link, price, image_gradient, image_url, image_focus_x, image_focus_y, created_at',
+          select: 'id, garden_id, title, description, date, time, city, source_timezone, location, speaker, category, registration_link, price, image_gradient, image_url, image_focus_x, image_focus_y, host_telegram, host_vk, created_at',
           order: 'id.asc',
           limit: String(pageSize),
           offset: String(from)
@@ -126,7 +126,7 @@ const Index = () => {
   };
 
   // Cache keys with version to invalidate old cache
-  const CACHE_VERSION = 'v3';
+  const CACHE_VERSION = 'v4';
   const CACHE_KEYS = {
     events: `skrebeyko_events_cache_${CACHE_VERSION}`,
     questions: `skrebeyko_questions_cache_${CACHE_VERSION}`,
@@ -136,22 +136,26 @@ const Index = () => {
 
   // Load data
   useEffect(() => {
-    // Clear old cache versions
-    const oldCacheKeys = [
+    // Очистка legacy-ключей без версии (динамический фильтр ниже их не поймает).
+    const legacyCacheKeys = [
       'skrebeyko_events_cache',
       'skrebeyko_questions_cache',
       'skrebeyko_cities_cache',
       'skrebeyko_notebooks_cache',
-      'skrebeyko_events_cache_v1',
-      'skrebeyko_questions_cache_v1',
-      'skrebeyko_cities_cache_v1',
-      'skrebeyko_notebooks_cache_v1',
     ];
-    oldCacheKeys.forEach(key => {
+    legacyCacheKeys.forEach(key => {
       if (localStorage.getItem(key)) {
         localStorage.removeItem(key);
       }
     });
+
+    // Очистка старых версий кеша. Любой ключ skrebeyko_*_cache_v*, не равный
+    // текущей CACHE_VERSION, считается устаревшим.
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('skrebeyko_') && k.includes('_cache_v') && !k.endsWith(`_${CACHE_VERSION}`))
+      .forEach(k => {
+        try { localStorage.removeItem(k); } catch { /* ignore */ }
+      });
 
     // 1. Try to load from cache immediately (Stale-While-Revalidate)
     const hasCache = loadFromCache();
