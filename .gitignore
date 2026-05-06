@@ -18,6 +18,7 @@ hosting-upload-mini/
 *.zip
 *.local
 .env
+.claude/
 
 # Editor directories and files
 .vscode/*
