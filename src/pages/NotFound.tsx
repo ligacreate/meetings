@@ -35,11 +35,6 @@ const NotFound = () => {
           </p>
         </div>
 
-        <div className="p-4 bg-muted rounded-xl text-left font-mono text-xs text-muted-foreground break-all">
-          <span className="text-foreground block mb-1">DEBUG INFO:</span>
-          <span className="text-destructive">Route not found:</span> {location.pathname}
-        </div>
-
         <Link to="/">
           <Button className="rounded-full px-8 py-6 w-full md:w-auto font-medium text-lg">
             <ArrowLeft className="mr-2 h-5 w-5" />
