@@ -537,17 +537,17 @@ const EventsView = ({ events, cities }: EventsViewProps) => {
                             // или невалидный URL → defence-in-depth, кнопку не рендерим.
                             if (!tgHref && !vkHref) return null;
                             return (
-                              <div className="flex flex-col sm:flex-row gap-2">
+                              <div className="flex flex-col gap-2">
                                 {tgHref && (
                                   <a
                                     href={tgHref}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    aria-label="Написать ведущей в Telegram"
+                                    aria-label="Написать ведущей в Телеграм"
                                     className={CONTACT_BUTTON_CLASS}
                                   >
                                     <MessageCircle className="w-4 h-4" />
-                                    <span>Telegram</span>
+                                    <span>Телеграм</span>
                                   </a>
                                 )}
                                 {vkHref && (
