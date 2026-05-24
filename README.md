@@ -14,11 +14,9 @@ npm install
 cp .env.example .env
 ```
 
-Fill `.env` with your Supabase values:
+Fill `.env` if you need to override the default backend:
 
-- `VITE_SUPABASE_PROJECT_ID`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SUPABASE_URL`
+- `VITE_POSTGREST_URL` — PostgREST API base URL (defaults to `https://api.skrebeyko.ru`)
 
 ## Development
 
