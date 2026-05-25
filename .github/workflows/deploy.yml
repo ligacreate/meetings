@@ -21,6 +21,8 @@ jobs:
         run: npm ci
 
       - name: Build
+        env:
+          VITE_MEETINGS_ADMIN_USER_IDS: ${{ secrets.VITE_MEETINGS_ADMIN_USER_IDS }}
         run: npm run build
 
       - name: Deploy via FTP
