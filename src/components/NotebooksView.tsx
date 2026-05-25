@@ -47,6 +47,11 @@ const NotebooksView = ({ notebooks }: NotebooksViewProps) => {
                   <h3 className="text-lg font-display font-bold text-slate-900 mb-2 leading-tight group-hover:text-primary transition-colors">
                     {notebook.title}
                   </h3>
+                  {notebook.price && (
+                    <div className="text-sm font-medium text-primary mb-2">
+                      {notebook.price}
+                    </div>
+                  )}
                   {notebook.description && (
                     <p className="text-sm text-slate-600 line-clamp-3 mb-4 leading-relaxed">
                       {notebook.description}

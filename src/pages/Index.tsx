@@ -126,7 +126,7 @@ const Index = () => {
   };
 
   // Cache keys with version to invalidate old cache
-  const CACHE_VERSION = 'v4';
+  const CACHE_VERSION = 'v5';
   const CACHE_KEYS = {
     events: `skrebeyko_events_cache_${CACHE_VERSION}`,
     questions: `skrebeyko_questions_cache_${CACHE_VERSION}`,
@@ -240,7 +240,7 @@ const Index = () => {
         ),
         postgrestFetch<Notebook[]>(
           'notebooks',
-          { select: 'id, title, description, image_url, pdf_url, created_at', order: 'created_at.desc' }
+          { select: 'id, title, description, price, image_url, pdf_url, created_at', order: 'created_at.desc' }
         )
       ]);
 

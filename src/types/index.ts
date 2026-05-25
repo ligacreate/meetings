@@ -24,6 +24,7 @@ export interface Notebook {
     id: number;
     title: string;
     description?: string;
+    price?: string;
     image_url?: string;
     pdf_url?: string;
 }

@@ -11,6 +11,7 @@ import MainLayout from '@/components/layout/MainLayout';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import NotebooksAdminTab from '@/components/admin/NotebooksAdminTab';
 
 type GuardState =
   | { status: 'loading' }
@@ -116,9 +117,7 @@ const Admin = () => {
             <TabsTrigger value="questions">Вопросы</TabsTrigger>
           </TabsList>
           <TabsContent value="notebooks">
-            <div className="py-8 text-center text-muted-foreground">
-              Скоро. CRUD блокнотов появится в Phase 2.
-            </div>
+            <NotebooksAdminTab />
           </TabsContent>
           <TabsContent value="questions">
             <div className="py-8 text-center text-muted-foreground">
