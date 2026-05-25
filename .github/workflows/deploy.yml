@@ -4,6 +4,9 @@ on:
   workflow_dispatch:
   push:
     branches: ["main"]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 jobs:
   build-and-deploy:
