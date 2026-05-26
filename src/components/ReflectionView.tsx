@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { RefreshCw, Pencil } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -7,23 +7,28 @@ interface ReflectionViewProps {
 }
 
 const ReflectionView = ({ questions }: ReflectionViewProps) => {
+  const uniqueQuestions = useMemo(
+    () => Array.from(new Set(questions)),
+    [questions]
+  );
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
   useEffect(() => {
-    if (questions.length > 0) {
-      setCurrentQuestionIndex(Math.floor(Math.random() * questions.length));
+    if (uniqueQuestions.length > 0) {
+      setCurrentQuestionIndex(Math.floor(Math.random() * uniqueQuestions.length));
     }
-  }, [questions.length]);
+  }, [uniqueQuestions.length]);
 
   const handleNextQuestion = () => {
+    if (uniqueQuestions.length <= 1) return;
     let newIndex = currentQuestionIndex;
-    while (newIndex === currentQuestionIndex && questions.length > 1) {
-      newIndex = Math.floor(Math.random() * questions.length);
+    while (newIndex === currentQuestionIndex) {
+      newIndex = Math.floor(Math.random() * uniqueQuestions.length);
     }
     setCurrentQuestionIndex(newIndex);
   };
 
-  if (questions.length === 0) {
+  if (uniqueQuestions.length === 0) {
     return null;
   }
 
@@ -61,7 +66,7 @@ const ReflectionView = ({ questions }: ReflectionViewProps) => {
               transition={{ duration: 0.4, ease: "easeOut" }}
               className="text-lg md:text-xl font-display leading-relaxed text-white font-medium"
             >
-              {questions[currentQuestionIndex]}
+              {uniqueQuestions[currentQuestionIndex]}
             </motion.p>
           </AnimatePresence>
         </div>
