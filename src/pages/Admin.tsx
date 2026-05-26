@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import NotebooksAdminTab from '@/components/admin/NotebooksAdminTab';
+import QuestionsAdminTab from '@/components/admin/QuestionsAdminTab';
 
 type GuardState =
   | { status: 'loading' }
@@ -120,9 +121,7 @@ const Admin = () => {
             <NotebooksAdminTab />
           </TabsContent>
           <TabsContent value="questions">
-            <div className="py-8 text-center text-muted-foreground">
-              Скоро. CRUD вопросов появится в Phase 3.
-            </div>
+            <QuestionsAdminTab />
           </TabsContent>
         </Tabs>
       </div>

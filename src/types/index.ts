@@ -28,3 +28,10 @@ export interface Notebook {
     image_url?: string;
     pdf_url?: string;
 }
+
+export interface Question {
+    id: number;
+    question: string;
+    order_index: number;
+    created_at?: string;
+}
