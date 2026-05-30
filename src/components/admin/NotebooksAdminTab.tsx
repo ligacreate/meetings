@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react';
+import { useEffect, useState, type ChangeEvent, type FormEvent, type ReactNode } from 'react';
 import {
   createNotebook,
   deleteNotebook,
@@ -6,6 +6,7 @@ import {
   updateNotebook,
   type NotebookInput,
 } from '@/lib/notebooks';
+import { uploadNotebookImage } from '@/lib/imageUpload';
 import type { Notebook } from '@/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -91,6 +92,8 @@ const NotebooksAdminTab = () => {
   const [form, setForm] = useState<NotebookInput>(EMPTY_FORM);
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const { toast } = useToast();
 
   const reload = async () => {
@@ -131,6 +134,23 @@ const NotebooksAdminTab = () => {
   const cancelForm = () => {
     setMode({ kind: 'list' });
     setForm(EMPTY_FORM);
+    setUploadError(null);
+  };
+
+  const handleFilePick = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setUploading(true);
+    setUploadError(null);
+    try {
+      const url = await uploadNotebookImage(file);
+      setField('image_url', url);
+    } catch (err) {
+      setUploadError(errMsg(err));
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -210,14 +230,34 @@ const NotebooksAdminTab = () => {
           />
         </Field>
 
-        <Field label="URL картинки *" error={errors.image_url}>
-          <Input
-            type="url"
-            value={form.image_url}
-            onChange={(e) => setField('image_url', e.target.value)}
-            disabled={busy}
-            placeholder="https://..."
-          />
+        <Field label="Картинка блокнота *" error={errors.image_url}>
+          <div className="space-y-2">
+            <input
+              type="file"
+              accept="image/*"
+              disabled={busy || uploading}
+              onChange={handleFilePick}
+              className="block text-sm file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200"
+            />
+            {uploading && (
+              <div className="text-xs text-slate-500">Загружаем картинку в хранилище…</div>
+            )}
+            {uploadError && <div className="text-xs text-red-600">{uploadError}</div>}
+            <Input
+              type="url"
+              value={form.image_url}
+              onChange={(e) => setField('image_url', e.target.value)}
+              disabled={busy || uploading}
+              placeholder="…или вставьте URL вручную (https://…)"
+            />
+            {form.image_url && (
+              <img
+                src={form.image_url}
+                alt="Предпросмотр"
+                className="w-24 h-32 object-cover rounded border bg-muted"
+              />
+            )}
+          </div>
         </Field>
 
         <Field label="URL покупки *" error={errors.pdf_url}>
@@ -231,10 +271,10 @@ const NotebooksAdminTab = () => {
         </Field>
 
         <div className="flex gap-2">
-          <Button type="submit" disabled={busy || !isValid}>
+          <Button type="submit" disabled={busy || uploading || !isValid}>
             {busy ? 'Сохраняем…' : 'Сохранить'}
           </Button>
-          <Button type="button" variant="ghost" onClick={cancelForm} disabled={busy}>
+          <Button type="button" variant="ghost" onClick={cancelForm} disabled={busy || uploading}>
             Отмена
           </Button>
         </div>
